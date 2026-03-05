@@ -16,7 +16,6 @@
     #cursor{position:fixed;width:10px;height:10px;background:var(--fg);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform .12s;mix-blend-mode:screen;}
     #cursor-ring{position:fixed;width:34px;height:34px;border:1.5px solid rgba(245,166,35,.55);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .22s,height .22s;}
     #particles{position:fixed;inset:0;pointer-events:none;z-index:1;}
-
     nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:20px 60px;background:linear-gradient(180deg,rgba(13,7,3,.95) 0%,rgba(13,7,3,0) 100%);backdrop-filter:blur(8px);border-bottom:1px solid rgba(245,166,35,.08);animation:sD .9s ease both;transition:padding .3s;}
     @keyframes sD{from{transform:translateY(-100%);opacity:0;}to{transform:none;opacity:1;}}
     .nl{font-family:'Cinzel',serif;font-size:.98rem;font-weight:900;letter-spacing:.18em;color:var(--fg);text-decoration:none;text-transform:uppercase;display:flex;align-items:center;gap:10px;}
@@ -29,8 +28,6 @@
     .nls a:hover::after,.nls a.cur::after{width:100%;}
     .nr{font-size:.7rem;letter-spacing:.12em;color:var(--sm);font-style:italic;}
     .nr b{color:var(--sa);font-style:normal;}
-
-    /* HERO */
     .ph{position:relative;height:70vh;min-height:500px;display:flex;align-items:center;justify-content:center;overflow:hidden;z-index:2;padding-top:80px;padding-bottom:60px;isolation:isolate;}
     #hc{position:absolute;inset:0;width:100%;height:100%;}
     .hbg{position:absolute;inset:0;z-index:1;background:radial-gradient(ellipse 90% 55% at 50% 100%,rgba(196,122,30,.28),transparent 65%),linear-gradient(180deg,#0D0703,#1a0d04 55%,#2e1608);}
@@ -53,12 +50,8 @@
     .hcnn{font-family:'Cinzel',serif;font-size:2rem;font-weight:900;background:linear-gradient(135deg,var(--gl),var(--fg));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
     .hcnl{font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--sm);margin-top:4px;}
     @keyframes fU{from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:none;}}
-
-    /* ROLES */
     .rs{position:relative;z-index:2;background:linear-gradient(180deg,var(--bk),var(--ab) 100%);}
     .rw{max-width:1360px;margin:0 auto;padding:80px 60px 120px;}
-
-    /* Filter */
     .fb-bar{display:flex;align-items:center;gap:8px;margin-bottom:50px;flex-wrap:wrap;}
     .fbl{font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:var(--sm);margin-right:4px;}
     .fbb{font-family:'Cinzel',serif;font-size:.63rem;letter-spacing:.12em;text-transform:uppercase;color:var(--cd);background:transparent;border:1px solid rgba(245,166,35,.15);padding:6px 14px;cursor:none;transition:all .3s;}
@@ -68,34 +61,19 @@
     .slb::before{content:'';display:block;width:28px;height:1px;background:var(--eo);}
     .stl{font-family:'Cinzel',serif;font-size:clamp(1.4rem,3vw,2.4rem);font-weight:700;color:var(--cr);margin-bottom:40px;}
     .stl span{background:linear-gradient(90deg,var(--fg),var(--eo));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-
-    /* GRID */
     .rg{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:3px;}
-
-    /* CARD */
     .rc{position:relative;overflow:hidden;background:rgba(42,21,6,.5);border:1px solid rgba(245,166,35,.07);transition:border-color .4s,background .4s;cursor:none;aspect-ratio:3/4;transform-style:preserve-3d;will-change:transform;}
     .rc:hover{border-color:rgba(245,166,35,.35);background:rgba(58,31,10,.8);}
-
-    /* image */
     .ci{position:absolute;inset:0;}
-    .cib{
-      position:absolute;inset:0;
-      background-size:cover;
-      background-position:center top;
-      background-repeat:no-repeat;
-      transition:transform .6s ease;
-      filter:saturate(.8) brightness(.75);
-    }
-    .rc:hover .cib{transform:scale(1.07);filter:saturate(1.1) brightness(.65);}
-
-    /* glow */
+    /* градиентный фон — всегда виден */
+    .cib{position:absolute;inset:0;}
+    /* картинка поверх градиента */
+    .cimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;transition:transform .6s ease,filter .6s ease;filter:saturate(.8) brightness(.75);}
+    .rc:hover .cimg{transform:scale(1.07);filter:saturate(1.1) brightness(.65);}
     .cg{position:absolute;inset:0;opacity:.2;transition:opacity .4s;}
     .rc:hover .cg{opacity:.4;}
-
-    /* fallback icon (shown if image fails) */
     .cci{position:absolute;font-size:5.5rem;opacity:.13;top:50%;left:50%;transform:translate(-50%,-60%);transition:opacity .4s;z-index:1;}
     .rc:hover .cci{opacity:.06;}
-
     .co{position:absolute;inset:0;background:linear-gradient(0deg,rgba(13,7,3,.96) 0%,rgba(13,7,3,.3) 55%,transparent 80%);z-index:2;}
     .ce{position:absolute;top:12px;right:12px;z-index:4;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.95rem;backdrop-filter:blur(4px);}
     .cc{position:absolute;bottom:0;left:0;right:0;z-index:3;padding:18px 16px 16px;}
@@ -104,10 +82,8 @@
     .cs{display:inline-flex;align-items:center;gap:5px;font-family:'Cinzel',serif;font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;padding:3px 9px;}
     .st{color:#0D0703;background:linear-gradient(135deg,var(--fg),var(--eo));}
     .sf{color:rgba(245,166,35,.65);border:1px solid rgba(245,166,35,.22);}
-
     .reveal{opacity:0;transform:translateY(20px);transition:opacity .7s,transform .7s;}
     .reveal.visible{opacity:1;transform:none;}
-
     footer{background:var(--bk);border-top:1px solid rgba(245,166,35,.1);z-index:2;padding:32px 60px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
     .flo{font-family:'Cinzel',serif;font-size:.9rem;font-weight:900;color:var(--fg);letter-spacing:.12em;text-decoration:none;}
     footer p{font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--sm);}
@@ -142,8 +118,8 @@
     <div class="hdv"><div class="dl"></div><div class="dg"></div><div class="dl"></div><div class="dg"></div><div class="dl"></div></div>
     <p class="hs">Каждый участник выбирает <em>своего персонажа</em> — и становится частью нашего Тейвата.</p>
     <div class="hct">
-      <div class="hcn"><div class="hcnn">27</div><div class="hcnl">Занято ролей</div></div>
-      <div class="hcn"><div class="hcnn">∞</div><div class="hcnl">Свободных ролей</div></div>
+      <div class="hcn"><div class="hcnn">28</div><div class="hcnl">Занято ролей</div></div>
+      <div class="hcn"><div class="hcnn">Много</div><div class="hcnl">Свободных ролей</div></div>
     </div>
   </div>
 </section>
@@ -155,6 +131,7 @@
       <button class="fbb active" data-f="all">Все</button>
       <div class="fsep"></div>
       <button class="fbb" data-f="taken">✦ Занятые</button>
+      <button class="fbb" data-f="free">+ Свободные</button>
       <div class="fsep"></div>
       <button class="fbb" data-f="pyro">🔥 Пиро</button>
       <button class="fbb" data-f="hydro">💧 Гидро</button>
@@ -166,6 +143,7 @@
     </div>
     <div class="slb reveal">Персонажи</div>
     <div class="stl reveal" id="stl"><span>Все</span> роли</div>
+    <div id="free" style="position:relative;top:-80px;"></div>
     <div class="rg" id="rg"></div>
   </div>
 </section>
@@ -177,20 +155,24 @@
 </footer>
 
 <script>
-// Изображения берутся с gi.yatta.moe — официальный CDN арт персонажей Genshin
 const BASE = 'https://gi.yatta.moe/assets/UI/UI_Gacha_AvatarImg_';
+const CDNS = [
+  'https://gi.yatta.moe/assets/UI/UI_Gacha_AvatarImg_',
+  'https://enka.network/ui/UI_Gacha_AvatarImg_',
+];
 
 const EC={pyro:'#E8621A',hydro:'#1A78C2',anemo:'#3CB89A',geo:'#C47A1E',electro:'#8B5CF6',dendro:'#4CAF50',cryo:'#6EC6E6'};
 const EE={pyro:'🔥',hydro:'💧',anemo:'🍃',geo:'🪨',electro:'⚡',dendro:'🌿',cryo:'❄️'};
 
-// img — имя файла на gi.yatta.moe (UI_Gacha_AvatarImg_<img>.png)
+// customImg — путь к своему арту (напр. 'images/lyney.png')
+// img:''    — нет арта на CDN, покажет только градиент + эмодзи
 const CHARS=[
   // ── ЗАНЯТЫЕ ──
   {n:'Арлекино',    e:'pyro',    r:'Снежная',        i:'🎭', img:'Arlecchino',   g:'#3d0808,#8a1010'},
   {n:'Чжун Ли',     e:'geo',     r:'Ли Юэ',          i:'🪨', img:'Zhongli',      g:'#3d2a08,#6b4a10'},
   {n:'Яэ Мико',     e:'electro', r:'Инадзума',       i:'🦊', img:'Yae',          g:'#2a1040,#6b2d8a'},
   {n:'Тарталья',    e:'hydro',   r:'Снежная',        i:'🏹', img:'Tartaglia',    g:'#081828,#0d4070'},
-  {n:'Скарамучча',  e:'electro', r:'Инадзума',       i:'🎪', img:'Wanderer',     g:'#0a0820,#1a0840'},
+  {n:'Скарамучча',  e:'anemo',   r:'Инадзума',       i:'🎪', img:'Wanderer',     g:'#0a0820,#1a0840'},
   {n:'Дилюк',       e:'pyro',    r:'Мондштадт',      i:'🍷', img:'Diluc',        g:'#3d0808,#7a1408'},
   {n:'Сяо',         e:'anemo',   r:'Ли Юэ',          i:'👹', img:'Xiao',         g:'#082018,#0a4030'},
   {n:'Кадзуха',     e:'anemo',   r:'Инадзума',       i:'🍁', img:'Kazuha',       g:'#082820,#0d5040'},
@@ -198,34 +180,153 @@ const CHARS=[
   {n:'Венти',       e:'anemo',   r:'Мондштадт',      i:'🎶', img:'Venti',        g:'#082820,#106040'},
   {n:'Альбедо',     e:'geo',     r:'Мондштадт',      i:'🎨', img:'Albedo',       g:'#1a1808,#3a3010'},
   {n:'Клоринда',    e:'electro', r:'Фонтейн',        i:'⚔️', img:'Clorinde',     g:'#1a0830,#4a1070'},
-  {n:'Пульчинелла', e:'cryo',    r:'Снежная',        i:'🤡', img:'Pulcinella',   g:'#081828,#106080'},
-  {n:'Линнет',      e:'anemo',   r:'Фонтейн',        i:'🎪', img:'Lynette',      g:'#082820,#124030'},
+  {n:'Пульчинелла', e:'cryo',    r:'Снежная',        i:'🤡', img:'',             customImg:'images/pulcinella.png', g:'#081828,#106080'},
+  {n:'Линнет',      e:'anemo',   r:'Фонтейн',        i:'🎪', img:'',             customImg:'images/lynette.png',    g:'#082820,#124030'},
   {n:'Беннет',      e:'pyro',    r:'Мондштадт',      i:'🗡️', img:'Bennett',      g:'#3d1008,#8a2a10'},
   {n:'Муалани',     e:'hydro',   r:'Натлан',         i:'🌊', img:'Mualani',      g:'#0a2040,#0d5c8a'},
   {n:'Бэй Доу',     e:'electro', r:'Ли Юэ',          i:'⚡', img:'Beidou',       g:'#1a0830,#3d1060'},
   {n:'Итто',        e:'geo',     r:'Инадзума',       i:'🐂', img:'Itto',         g:'#2d1a08,#5a3010'},
-  {n:'Шилонен',     e:'geo',     r:'Натлан',         i:'🛡️', img:'Sigewinne',    g:'#2d1a08,#604020'},
-  {n:'Лини',        e:'cryo',    r:'Фонтейн',        i:'🐇', img:'Lyney',        g:'#081828,#0a4060'},
+  {n:'Шилонен',     e:'geo',     r:'Натлан',         i:'🛡️', img:'Xilonen',      g:'#2d1a08,#604020'},
+  {n:'Лини',        e:'pyro',    r:'Фонтейн',        i:'🎩', img:'',             customImg:'images/lyney.png',      g:'#3d1008,#7a2408'},
   {n:'Кавех',       e:'dendro',  r:'Сумеру',         i:'🏛️', img:'Kaveh',        g:'#0a2010,#1a5020'},
   {n:'Дурин',       e:'pyro',    r:'Дракон',         i:'🐉', img:'Durin',        g:'#200808,#5a0808'},
-  {n:'Сайно',       e:'electro', r:'Инадзума',       i:'⚡', img:'Cyno',         g:'#0a0820,#200850'},
-  {n:'Варесса',     e:'pyro',    r:'Натлан',         i:'🔥', img:'Varesa',       g:'#2d0808,#6a1208'},
-  {n:'Сандроне',    e:'dendro',  r:'Сумеру',         i:'🤖', img:'Sandrone',     g:'#0a1808,#1a4010'},
-  {n:'Люмин',       e:'anemo',   r:'Путешественник', i:'⭐', img:'PlayerGirl',   g:'#1a1408,#3a2808'},
+  {n:'Сайно',       e:'electro', r:'Сумеру',         i:'⚡', img:'Cyno',         g:'#0a0820,#200850'},
+  {n:'Варесса',     e:'electro', r:'Натлан',         i:'🔥', img:'Varesa',       g:'#2d0808,#6a1208'},
+  {n:'Сандроне',    e:'?',  r:'Фонтейн',        i:'🤖', img:'',             customImg:'images/sandrone.png',   g:'#0a1808,#1a4010'},
+  {n:'Люмин',       e:'anemo',   r:'Путешественница',i:'⭐', img:'PlayerGirl',   g:'#1a1408,#3a2808'},
   {n:'Ифа',         e:'dendro',  r:'Сумеру',         i:'🌺', img:'Ifa',          g:'#0a1808,#1a5020'},
+  {n:'Скирк',       e:'cryo',    r:'Чужеземка',      i:'🗡️', img:'',             customImg:'images/skirk.png',      g:'#081828,#106090'},
+  // ── СВОБОДНЫЕ ──
+  {n:'Алиса',       e:'?',       r:'Хранительница Границ',    i:'🗡️', img:'',             customImg:'images/alisa.png',      g:'#081828,#106090', f:1},
+  {n:'Сахароза',    e:'anemo',   r:'Мондштадт',      i:'📋', img:'Sucrose',      g:'#080818,#0a3060', f:1},
+  {n:'Паймон',      e:'?',       r:'Консервная банка',       i:'💃', img:'',             customImg:'images/paimon.png',      g:'#081828,#106090', f:1},
+  {n:'Джинн',       e:'anemo',   r:'Мондштадт',      i:'🐟', img:'Qin',          g:'#080818,#0a3060', f:1},
+  {n:'Ху Тао',      e:'pyro',    r:'Ли Юэ',          i:'👻', img:'Hutao',        g:'#2d0808,#7a0a0a', f:1},
+  {n:'Чун Юнь',     e:'cryo',    r:'Ли Юэ',          i:'🎭', img:'Chongyun',     g:'#081828,#0a3870', f:1},
+  {n:'Син Цю',      e:'hydro',   r:'Ли Юэ',          i:'🤖', img:'Xingqiu',      g:'#080818,#0a3060', f:1},
+  {n:'Пьеро',       e:'?',       r:'Снежная',        i:'💃', img:'',             customImg:'images/piero.png',      g:'#081828,#106090', f:1},
+  {n:'Сян Лин',     e:'pyro',    r:'Ли Юэ',          i:'🔥', img:'Xiangling',    g:'#2d0808,#6a1408', f:1},
+  {n:'Гуй Чжун',    e:'?',       r:'Богиня Пыли',    i:'🗡️', img:'',             customImg:'images/gui_zhun.png',      g:'#081828,#106090', f:1},
+  {n:'Эскофье',     e:'cryo',    r:'Фонтейн',        i:'🪨', img:'Escoffier',    g:'#080818,#0a2858', f:1},
+  {n:'Бай Чжу',     e:'dendro',  r:'Ли Юэ',          i:'🏹', img:'Baizhuer',     g:'#081808,#0a3820', f:1},
+  {n:'Николь',      e:'?',       r:'???',            i:'🗡️', img:'',             customImg:'images/nicole1.png',      g:'#081828,#106090', f:1},
+  {n:'Ёимия',       e:'pyro',    r:'Инадзума',       i:'👻', img:'Yoimiya',      g:'#2d0808,#7a0a0a', f:1},
+  {n:'Синь Янь',    e:'pyro',    r:'Ли Юэ',          i:'🔥', img:'Xinyan',       g:'#2d0808,#6a1408', f:1},
+  {n:'Цзы Бай',     e:'geo',     r:'Ли Юэ',          i:'🦊', img:'Zibai',        g:'#2d1a08,#5a3010', f:1},
+  {n:'Кэ Цин',      e:'electro', r:'Ли Юэ',          i:'⚡', img:'Keqing',       g:'#0a0828,#180850', f:1},
+  {n:'Качина',      e:'geo',     r:'Натлан',         i:'📋', img:'Kachina',      g:'#080818,#0a2858', f:1},
+  {n:'Рейдэн Сёгун',e:'electro', r:'Инадзума',       i:'⚡', img:'Shougun',      g:'#0a0828,#180850', f:1},
+  {n:'Дотторе',     e:'?',       r:'Снежная',        i:'🗡️', img:'',             customImg:'images/dottore.png',      g:'#081828,#106090', f:1},
+  {n:'Нин Гуан',    e:'geo',     r:'Ли Юэ',          i:'📋', img:'Ningguang',    g:'#080818,#0a2858', f:1},
+  {n:'Кли',         e:'pyro',    r:'Мондштадт',      i:'🔥', img:'Klee',         g:'#2d0808,#6a1408', f:1},
+  {n:'Элой',        e:'cryo',    r:'Спасательница',  i:'☁️', img:'Aloy',         g:'#081828,#104060', f:1},
+  {n:'Гань Юй',     e:'cryo',    r:'Ли Юэ',          i:'🏹', img:'Ganyu',        g:'#081828,#0a4060', f:1},
+  {n:'Фишль',       e:'electro', r:'Мондштадт',      i:'⚡', img:'Fischl',       g:'#0a0828,#180850', f:1},
+  {n:'Аято',        e:'hydro',   r:'Инадзума',       i:'🤖', img:'Ayato',        g:'#080818,#0a3060', f:1},
+  {n:'Панталоне',   e:'?',       r:'Снежная',        i:'💃', img:'',             customImg:'images/pantalone.png',      g:'#081828,#106090', f:1},
+  {n:'Аяка',        e:'cryo',    r:'Инадзума',       i:'🗡️', img:'Ayaka',        g:'#080818,#0a3060', f:1},
+  {n:'Коломбина',   e:'hydro',   r:'Нод-Край',       i:'🐟', img:'Columbina',    g:'#050d2a,#0d2060', f:1},
+  {n:'Кандакия',    e:'hydro',   r:'Сумеру',         i:'💃', img:'Candace',      g:'#081808,#0a3820', f:1},
+  {n:'Навия',       e:'geo',     r:'Фонтейн',        i:'🏛️', img:'Navia',        g:'#080818,#0a2858', f:1},
+  {n:'Ка Мин',      e:'pyro',    r:'Ли Юэ',          i:'🔥', img:'Gaming',       g:'#2d0808,#6a1408', f:1},
+  {n:'Часка',       e:'anemo',   r:'Натлан',         i:'🗡️', img:'Chasca',       g:'#082018,#0a3828', f:1},
+  {n:'Шарлотта',    e:'cryo',    r:'Фонтейн',        i:'🏹', img:'Charlotte',    g:'#081828,#0a3870', f:1},
+  {n:'Капитано',    e:'?',       r:'Снежная',        i:'💃', img:'',             customImg:'images/capitano.png',      g:'#081828,#106090', f:1},
+  {n:'Фурина',      e:'hydro',   r:'Фонтейн',        i:'🧜', img:'Furina',       g:'#080818,#0a2858', f:1},
+  {n:'Нилу',        e:'hydro',   r:'Сумеру',         i:'💃', img:'Nilou',        g:'#081808,#0a3820', f:1},
+  {n:'Саю',         e:'anemo',   r:'Инадзума',       i:'🗡️', img:'Sayu',         g:'#082018,#0a3828', f:1},
+  {n:'Янь Фэй',     e:'pyro',    r:'Ли Юэ',          i:'🔥', img:'Feiyan',       g:'#2d0808,#6a1408', f:1},
+  {n:'Розария',     e:'cryo',    r:'Мондштадт',      i:'🎭', img:'Rosaria',      g:'#081828,#0a3870', f:1},
+  {n:'Лань Янь',    e:'anemo',   r:'Ли Юэ',          i:'🎵', img:'Lanyan',       g:'#082020,#0d4030', f:1},
+  {n:'Эола',        e:'cryo',    r:'Мондштадт',      i:'💃', img:'Eula',         g:'#081828,#0a3870', f:1},
+  {n:'Эмилия',      e:'dendro',  r:'Фонтейн',        i:'⭐', img:'Emilie',       g:'#0a1808,#1a4010', f:1},
+  {n:'Лаума',       e:'dendro',  r:'Нод-Край',       i:'🐆', img:'Lauma',        g:'#0a1808,#1a4010', f:1},
+  {n:'Сетос',       e:'electro', r:'Сумеру',         i:'⚡', img:'Sethos',       g:'#0a0820,#200850', f:1},
+  {n:'Тигнари',     e:'dendro',  r:'Сумеру',         i:'🐆', img:'Tighnari',     g:'#0a1808,#1a4010', f:1},
+  {n:'Тиори',       e:'geo',     r:'Фонтейн',        i:'🎐', img:'Chiori',       g:'#080818,#0a2858', f:1},
+  {n:'Дори',        e:'electro', r:'Сумеру',         i:'⚡', img:'Dori',         g:'#0a0828,#180850', f:1},
+  {n:'Кирара',      e:'dendro',  r:'Инадзума',       i:'🐉', img:'Momoka',       g:'#081808,#0a3820', f:1},
+  {n:'Мидзуки',     e:'anemo',   r:'Инадзума',       i:'🌸', img:'Mizuki',       g:'#082018,#0a3828', f:1},
+  {n:'Куки Синобу', e:'electro', r:'Инадзума',       i:'⭐', img:'Shinobu',      g:'#1a0828,#380858', f:1},
+  {n:'Эмбер',       e:'pyro',    r:'Мондштадт',      i:'🦅', img:'Ambor',        g:'#2d0808,#6a1208', f:1},
+  {n:'Сянь Юнь',    e:'anemo',   r:'Ли Юэ',          i:'⚡', img:'Liuyun',       g:'#0a0828,#180850', f:1},
+  {n:'Яо Яо',       e:'dendro',  r:'Ли Юэ',          i:'🐉', img:'Yaoyao',       g:'#081808,#0a3820', f:1},
+  {n:'Диона',       e:'cryo',    r:'Мондштадт',      i:'🏹', img:'Diona',        g:'#081828,#0a4060', f:1},
+  {n:'Нёвиллет',    e:'hydro',   r:'Фонтейн',        i:'🐟', img:'Neuvillette',  g:'#080818,#0a3060', f:1},
+  {n:'Кокоми',      e:'hydro',   r:'Инадзума',       i:'🐙', img:'Kokomi',       g:'#080818,#0a2050', f:1},
+  {n:'Нахида',      e:'dendro',  r:'Сумеру',         i:'🌸', img:'Nahida',       g:'#1a0828,#380858', f:1},
+  {n:'Шэнь Хэ',     e:'cryo',    r:'Ли Юэ',          i:'🎭', img:'Shenhe',       g:'#081828,#0a3870', f:1},
+  {n:'Синьора',     e:'?',       r:'Снежная',        i:'💃', img:'',             customImg:'images/sss.png',      g:'#081828,#106090', f:1},
+  {n:'Юнь Цзинь',   e:'geo',     r:'Ли Юэ',          i:'🦊', img:'Yunjin',       g:'#2d1a08,#5a3010', f:1},
+  {n:'Нефер',       e:'dendro',  r:'Нод-Край',       i:'🐉', img:'Nefer',        g:'#081808,#0a3820', f:1},
+  {n:'Фремине',     e:'cryo',    r:'Фонтейн',        i:'☁️', img:'Freminet',     g:'#080818,#0a2050', f:1},
+  {n:'Хэйдзо',      e:'anemo',   r:'Инадзума',       i:'🐟', img:'Heizo',        g:'#080818,#0a3060', f:1},
+  {n:'Сиджвин',     e:'hydro',   r:'Фонтейн',        i:'🐟', img:'Sigewinne',    g:'#050d2a,#0d2060', f:1},
+  {n:'Итэр',        e:'anemo',   r:'Путешественник', i:'⭐', img:'PlayerBoy',    g:'#1a1408,#3a2808', f:1},
+  {n:'Коллеи',      e:'dendro',  r:'Сумеру',         i:'🏺', img:'Collei',       g:'#0a1808,#1a4010', f:1},
+  {n:'Варка',       e:'anemo',   r:'Мондштадт',      i:'🧜', img:'Varka',        g:'#082018,#0a3828', f:1},
+  {n:'Ноэлль',      e:'geo',     r:'Мондштадт',      i:'📋', img:'Noel',         g:'#080818,#0a2858', f:1},
+  {n:'Далия',       e:'hydro',   r:'Мондштадт',      i:'🌊', img:'Dahlia',       g:'#080818,#0a2858', f:1},
+  {n:'Е Лань',      e:'hydro',   r:'Ли Юэ',          i:'🎵', img:'Yelan',        g:'#080818,#0a3468', f:1},
+  {n:'Фарузан',     e:'anemo',   r:'Сумеру',         i:'🏺', img:'Faruzan',      g:'#082018,#0a3828', f:1},
+  {n:'Ягода',       e:'anemo',   r:'Нод-Край',       i:'🌺', img:'Jahoda',       g:'#082018,#0a3828', f:1},
+  {n:'Ситлали',     e:'cryo',    r:'Натлан',         i:'☁️', img:'Citlali',      g:'#080818,#0a2050', f:1},
+  {n:'Барбара',     e:'hydro',   r:'Мондштадт',      i:'🐟', img:'Barbara',      g:'#080818,#0a3060', f:1},
+  {n:'Рэйзор',      e:'electro', r:'Мондштадт',      i:'⚡', img:'Razor',        g:'#1a0828,#380858', f:1},
+  {n:'Дэхья',       e:'pyro',    r:'Сумеру',         i:'🔥', img:'Dehya',        g:'#2d0808,#6a1408', f:1},
+  {n:'Айно',        e:'hydro',   r:'Нод-Край',       i:'🐟', img:'Aino',         g:'#080818,#0a3060', f:1},
+  {n:'Оророн',      e:'electro', r:'Натлан',         i:'⚡', img:'Olorun',       g:'#1a0828,#380858', f:1},
+  {n:'Лейла',       e:'cryo',    r:'Сумеру',         i:'🌙', img:'Layla',        g:'#080818,#0a2050', f:1},
+  {n:'Иллуги',      e:'geo',     r:'Нод-Край',       i:'📋', img:'Illuga',       g:'#080818,#0a2858', f:1},
+  {n:'Кинич',       e:'dendro',  r:'Натлан',         i:'🐆', img:'Kinich',       g:'#0a1808,#1a4010', f:1},
+  {n:'Лиза',        e:'electro', r:'Мондштадт',      i:'🐆', img:'Lisa',         g:'#0a0820,#180850', f:1},
+  {n:'Мавуика',     e:'pyro',    r:'Натлан',         i:'🦅', img:'Mavuika',      g:'#2d0808,#6a1208', f:1},
+  {n:'Дайнслейф',   e:'?',       r:'Каэнриах',       i:'💃', img:'',             customImg:'images/daun.png',      g:'#081828,#106090', f:1},
+  {n:'Иансан',      e:'electro', r:'Натлан',         i:'🌋', img:'Iansan',       g:'#2d0808,#7a1008', f:1},
+  {n:'Кудзё Сара',  e:'electro', r:'Инадзума',       i:'🐆', img:'Sara',         g:'#0a0820,#180850', f:1},
+  {n:'Ци Ци',       e:'cryo',    r:'Ли Юэ',          i:'☁️', img:'Qiqi',         g:'#081828,#104060', f:1},
+  {n:'Флинс',       e:'electro', r:'Нод-Край',       i:'⚡', img:'Flins',        g:'#1a0828,#380858', f:1},
+  {n:'Горо',        e:'geo',     r:'Инадзума',       i:'🦊', img:'Gorou',        g:'#2d1a08,#5a3010', f:1},
+  {n:'Аль-Хайтам',  e:'dendro',  r:'Сумеру',         i:'🌙', img:'Alhatham',     g:'#081808,#0a3820', f:1},
+  {n:'Инеффа',      e:'electro', r:'Нод-Край',       i:'🐆', img:'Ineffa',       g:'#0a0820,#180850', f:1},
+  {n:'Шеврёз',      e:'pyro',    r:'Фонтейн',        i:'🐉', img:'Chevreuse',    g:'#2d0808,#6a1408', f:1},
+  {n:'Мика',        e:'cryo',    r:'Мондштадт',      i:'📋', img:'Mika',         g:'#081828,#0a3870', f:1},
+  {n:'Чайльд',      e:'?',       r:'Снежная',        i:'💃', img:'',             customImg:'images/chaild.png',      g:'#081828,#106090', f:1},
+  {n:'Тома',        e:'pyro',    r:'Инадзума',       i:'🐉', img:'Tohma',        g:'#200808,#5a0808', f:1},
+  {n:'Ризли',       e:'cryo',    r:'Фонтейн',        i:'🦦', img:'Wriothesley',  g:'#080818,#0a2858', f:1},
+  {n:'Кэйа',        e:'cryo',    r:'Мондштадт',      i:'🌙', img:'Kaeya',        g:'#080818,#0a2858', f:1},
 ];
 
 const CE=document.getElementById('cursor'),RE=document.getElementById('cursor-ring');
 function sc(b){CE.style.transform=`translate(-50%,-50%) scale(${b?2:1})`;RE.style.width=b?'56px':'34px';RE.style.height=b?'56px':'34px';}
 
+function imgFallback(el){
+  const n=parseInt(el.dataset.cdn||0)+1;
+  if(n<CDNS.length){el.dataset.cdn=n;el.src=CDNS[n]+el.dataset.img+'.png';}
+  else{el.style.display='none';}
+}
+
 function mkCard(ch){
   const taken=!ch.f, col=EC[ch.e]||'#F5A623', em=EE[ch.e]||'✦';
-  const imgUrl = BASE + ch.img + '.png';
+  const gc=ch.g.split(',');
   const d=document.createElement('div');
   d.className='rc reveal'; d.dataset.el=ch.e; d.dataset.st=taken?'taken':'free';
+
+  // выбираем источник картинки:
+  // 1. customImg — свой файл
+  // 2. img       — CDN с фоллбэком
+  // 3. ничего    — только градиент + эмодзи
+  let imgTag='';
+  if(ch.customImg){
+    imgTag=`<img class="cimg" src="${ch.customImg}" alt="${ch.n}">`;
+  } else if(ch.img){
+    imgTag=`<img class="cimg" data-img="${ch.img}" data-cdn="0" src="${CDNS[0]+ch.img+'.png'}" alt="${ch.n}" onerror="imgFallback(this)">`;
+  }
+
   d.innerHTML=`
     <div class="ci">
-      <div class="cib" style="background-image:url('${imgUrl}');background-color:#${ch.g.split('#')[1]};"></div>
+      <div class="cib" style="background:linear-gradient(160deg,${gc[0]||'#1a0808'},${gc[1]||gc[0]||'#3a1010'});"></div>
+      ${imgTag}
       <div class="cg" style="background:radial-gradient(ellipse 80% 80% at 50% 80%,${col}55 0%,transparent 70%);"></div>
       <div class="cci">${ch.i}</div>
     </div>
@@ -331,6 +432,17 @@ const embers=Array.from({length:90},()=>new Em());
 /* REVEAL */
 const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});},{threshold:.06});
 document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+/* AUTO FILTER FROM HASH */
+if(location.hash==='#free'){
+  document.querySelectorAll('.fbb').forEach(b=>b.classList.remove('active'));
+  const freeBtn=document.querySelector('.fbb[data-f="free"]');
+  if(freeBtn)freeBtn.classList.add('active');
+  document.querySelectorAll('.rc').forEach(c=>{c.style.display=c.dataset.st==='free'?'':'none';});
+  document.getElementById('stl').innerHTML='<span>Свободные</span> роли';
+  setTimeout(()=>{document.getElementById('free').scrollIntoView({behavior:'smooth',block:'start'});},300);
+}
+
 window.addEventListener('scroll',()=>{document.querySelector('nav').style.padding=scrollY>60?'11px 60px':'20px 60px';},{passive:true});
 </script>
 </body>

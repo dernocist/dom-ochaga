@@ -8,319 +8,521 @@
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Philosopher:ital,wght@0,400;0,700;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,700;1,400;1,600&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <style>
-    :root {
-      --flame-gold:   #F5A623;
-      --ember-orange: #E8621A;
-      --hearth-amber: #C47A1E;
-      --soft-amber:   #D4943A;
-      --ash-brown:    #2A1506;
-      --black:        #0D0703;
-      --smoke:        #7A5030;
-      --smoke-light:  #9A6840;
-      --gold-light:   #FFD166;
-      --cream:        #F5E6C8;
-      --cream-dim:    #C8B090;
-    }
+    :root{--fg:#F5A623;--eo:#E8621A;--ha:#C47A1E;--sa:#D4943A;--ab:#2A1506;--bk:#0D0703;--sm:#7A5030;--gl:#FFD166;--cr:#F5E6C8;--cd:#C8B090;}
     *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
     html{scroll-behavior:smooth;}
-    body{font-family:'Philosopher',serif;background:var(--black);color:var(--cream);overflow-x:hidden;cursor:none;}
+    body{font-family:'Philosopher',serif;background:var(--bk);color:var(--cr);overflow-x:hidden;cursor:none;}
     canvas{pointer-events:none!important;}
-
-    /* CURSOR */
-    #cursor{position:fixed;width:10px;height:10px;background:var(--flame-gold);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform .12s;mix-blend-mode:screen;}
+    #cursor{position:fixed;width:10px;height:10px;background:var(--fg);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform .12s;mix-blend-mode:screen;}
     #cursor-ring{position:fixed;width:34px;height:34px;border:1.5px solid rgba(245,166,35,.55);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .22s,height .22s;}
     #particles{position:fixed;inset:0;pointer-events:none;z-index:1;}
 
-    /* NAV */
-    nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:20px 60px;background:linear-gradient(180deg,rgba(13,7,3,.95) 0%,rgba(13,7,3,0) 100%);backdrop-filter:blur(8px);border-bottom:1px solid rgba(245,166,35,.08);animation:slideDown .9s cubic-bezier(.4,0,.2,1) both;transition:padding .3s;}
-    @keyframes slideDown{from{transform:translateY(-100%);opacity:0;}to{transform:translateY(0);opacity:1;}}
-    .nav-logo{font-family:'Cinzel',serif;font-size:.98rem;font-weight:900;letter-spacing:.18em;color:var(--flame-gold);text-decoration:none;text-transform:uppercase;display:flex;align-items:center;gap:10px;}
-    .nav-dot{width:6px;height:6px;background:var(--ember-orange);border-radius:50%;animation:dotpulse 2s ease-in-out infinite;}
-    @keyframes dotpulse{0%,100%{box-shadow:0 0 0 0 rgba(232,98,26,.5);}50%{box-shadow:0 0 0 7px rgba(232,98,26,0);}}
-    .nav-links{display:flex;gap:36px;list-style:none;}
-    .nav-links a{font-family:'Cinzel',serif;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--cream-dim);text-decoration:none;position:relative;transition:color .3s;}
-    .nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--flame-gold);transition:width .35s cubic-bezier(.4,0,.2,1);}
-    .nav-links a:hover,.nav-links a.cur{color:var(--flame-gold);}
-    .nav-links a:hover::after,.nav-links a.cur::after{width:100%;}
-    .nav-right{font-size:.7rem;letter-spacing:.12em;color:var(--smoke);font-style:italic;}
-    .nav-right b{color:var(--soft-amber);font-style:normal;}
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:20px 60px;background:linear-gradient(180deg,rgba(13,7,3,.95),rgba(13,7,3,0));backdrop-filter:blur(8px);border-bottom:1px solid rgba(245,166,35,.08);animation:sD .9s ease both;transition:padding .3s;}
+    @keyframes sD{from{transform:translateY(-100%);opacity:0;}to{transform:none;opacity:1;}}
+    .nl{font-family:'Cinzel',serif;font-size:.98rem;font-weight:900;letter-spacing:.18em;color:var(--fg);text-decoration:none;text-transform:uppercase;display:flex;align-items:center;gap:10px;}
+    .nd{width:6px;height:6px;background:var(--eo);border-radius:50%;animation:dp 2s ease-in-out infinite;}
+    @keyframes dp{50%{box-shadow:0 0 0 7px rgba(232,98,26,0);}}
+    .nls{display:flex;gap:30px;list-style:none;}
+    .nls a{font-family:'Cinzel',serif;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--cd);text-decoration:none;position:relative;transition:color .3s;}
+    .nls a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--fg);transition:width .35s;}
+    .nls a:hover,.nls a.cur{color:var(--fg);}
+    .nls a:hover::after,.nls a.cur::after{width:100%;}
+    .nr{font-size:.7rem;letter-spacing:.12em;color:var(--sm);font-style:italic;}
+    .nr b{color:var(--sa);font-style:normal;}
 
     /* HERO */
-    .page-hero{position:relative;height:60vh;min-height:420px;display:flex;align-items:center;justify-content:center;overflow:hidden;z-index:2;padding-top:80px;isolation:isolate;}
-    #hero-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;}
-    .hero-bg{position:absolute;inset:0;z-index:1;background:radial-gradient(ellipse 90% 55% at 50% 100%,rgba(196,122,30,.28) 0%,transparent 65%),linear-gradient(180deg,#0D0703 0%,#1a0d04 55%,#2e1608 100%);}
-    .hero-vignette{position:absolute;inset:0;z-index:2;background:radial-gradient(ellipse 70% 70% at 50% 50%,transparent 25%,rgba(13,7,3,.55) 100%);}
-    .fire-base{position:absolute;bottom:-60px;left:50%;transform:translateX(-50%);width:700px;height:320px;background:radial-gradient(ellipse,rgba(245,166,35,.28) 0%,rgba(232,98,26,.14) 35%,transparent 70%);border-radius:50%;animation:fireBreath 3.5s ease-in-out infinite alternate;z-index:1;}
-    @keyframes fireBreath{0%{opacity:.6;transform:translateX(-50%) scale(1);}100%{opacity:1;transform:translateX(-50%) scale(1.1);}}
-    .hero-inner{position:relative;z-index:10;text-align:center;display:flex;flex-direction:column;align-items:center;gap:20px;padding:0 24px;}
-    .hero-eyebrow{font-family:'Cinzel',serif;font-size:.68rem;letter-spacing:.5em;text-transform:uppercase;color:var(--hearth-amber);opacity:0;animation:fadeUp .8s .2s ease both;}
-    .hero-title{font-family:'Cinzel',serif;font-weight:900;font-size:clamp(2.6rem,8vw,7rem);line-height:.9;opacity:0;animation:fadeUp 1s .35s cubic-bezier(.2,.8,.3,1) both;}
-    .ht-1{display:block;color:var(--cream);text-shadow:0 0 50px rgba(245,166,35,.2);}
-    .ht-2{display:block;background:linear-gradient(135deg,var(--gold-light),var(--flame-gold),var(--ember-orange));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 24px rgba(245,166,35,.55));}
-    .hero-divider{display:flex;align-items:center;gap:14px;max-width:420px;width:100%;opacity:0;animation:fadeUp .8s .6s ease both;}
-    .hdiv-line{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--hearth-amber),transparent);}
-    .hdiv-gem{width:7px;height:7px;background:var(--flame-gold);transform:rotate(45deg);animation:gemGlow 2.5s ease-in-out infinite;}
-    @keyframes gemGlow{0%,100%{box-shadow:0 0 6px var(--flame-gold);}50%{box-shadow:0 0 18px var(--flame-gold),0 0 32px var(--ember-orange);}}
-    .hero-sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(1rem,1.8vw,1.3rem);color:var(--cream-dim);opacity:0;animation:fadeUp .8s .75s ease both;max-width:520px;line-height:1.7;}
-    .hero-sub em{color:var(--flame-gold);font-style:normal;}
-    @keyframes fadeUp{from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:translateY(0);}}
+    .ph{position:relative;height:62vh;min-height:440px;display:flex;align-items:center;justify-content:center;overflow:hidden;z-index:2;padding-top:80px;isolation:isolate;}
+    #hc{position:absolute;inset:0;width:100%;height:100%;}
+    .hbg{position:absolute;inset:0;z-index:1;background:radial-gradient(ellipse 90% 55% at 50% 100%,rgba(196,122,30,.28),transparent 65%),linear-gradient(180deg,#0D0703,#1a0d04 55%,#2e1608);}
+    .hv{position:absolute;inset:0;z-index:2;background:radial-gradient(ellipse 70% 70% at 50% 50%,transparent 25%,rgba(13,7,3,.55) 100%);}
+    .fb{position:absolute;bottom:-60px;left:50%;transform:translateX(-50%);width:700px;height:320px;background:radial-gradient(ellipse,rgba(245,166,35,.28) 0%,rgba(232,98,26,.14) 35%,transparent 70%);border-radius:50%;animation:fB 3.5s ease-in-out infinite alternate;z-index:1;}
+    @keyframes fB{0%{opacity:.6;transform:translateX(-50%) scale(1);}100%{opacity:1;transform:translateX(-50%) scale(1.1);}}
+    .hi{position:relative;z-index:10;text-align:center;display:flex;flex-direction:column;align-items:center;gap:18px;padding:0 24px;}
+    .ey{font-family:'Cinzel',serif;font-size:.68rem;letter-spacing:.5em;text-transform:uppercase;color:var(--ha);opacity:0;animation:fU .8s .2s ease both;}
+    .ht{font-family:'Cinzel',serif;font-weight:900;font-size:clamp(2.6rem,8vw,7rem);line-height:.9;opacity:0;animation:fU 1s .35s ease both;}
+    .h1{display:block;color:var(--cr);}
+    .h2{display:block;background:linear-gradient(135deg,var(--gl),var(--fg),var(--eo));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 24px rgba(245,166,35,.55));}
+    .hdv{display:flex;align-items:center;gap:14px;max-width:420px;width:100%;opacity:0;animation:fU .8s .6s ease both;}
+    .dl{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--ha),transparent);}
+    .dg{width:7px;height:7px;background:var(--fg);transform:rotate(45deg);animation:gG 2.5s ease-in-out infinite;}
+    @keyframes gG{50%{box-shadow:0 0 18px var(--fg),0 0 32px var(--eo);}}
+    .hs{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(1rem,1.8vw,1.25rem);color:var(--cd);opacity:0;animation:fU .8s .75s ease both;max-width:540px;line-height:1.7;}
+    .hs em{color:var(--fg);font-style:normal;}
+    @keyframes fU{from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:none;}}
 
-    /* GAMES SECTION */
-    .games-section{position:relative;z-index:2;background:linear-gradient(180deg,var(--black) 0%,var(--ash-brown) 60%,var(--black) 100%);}
-    .games-wrap{max-width:1200px;margin:0 auto;padding:90px 60px 120px;}
+    /* TOC */
+    .toc-sec{position:relative;z-index:2;background:rgba(13,7,3,.8);border-bottom:1px solid rgba(245,166,35,.08);}
+    .toc-wrap{max-width:1200px;margin:0 auto;padding:48px 60px;display:grid;grid-template-columns:repeat(3,1fr);gap:3px;}
+    .toc-col{background:rgba(42,21,6,.45);border:1px solid rgba(245,166,35,.07);padding:32px 28px;transition:background .4s,border-color .4s;cursor:none;}
+    .toc-col:hover{background:rgba(58,31,10,.7);border-color:rgba(245,166,35,.22);}
+    .toc-ico{font-size:1.8rem;margin-bottom:12px;display:block;}
+    .toc-head{font-family:'Cinzel',serif;font-size:.55rem;letter-spacing:.4em;text-transform:uppercase;color:var(--ha);margin-bottom:6px;}
+    .toc-title{font-family:'Cinzel',serif;font-size:.98rem;font-weight:700;color:var(--cr);margin-bottom:14px;}
+    .toc-list{list-style:none;display:flex;flex-direction:column;gap:5px;}
+    .toc-list li{font-family:'Cormorant Garamond',serif;font-size:.92rem;color:var(--cd);display:flex;align-items:center;gap:7px;}
+    .toc-list li::before{content:'';width:4px;height:4px;background:var(--fg);transform:rotate(45deg);flex-shrink:0;opacity:.4;}
+    .toc-list a{color:inherit;text-decoration:none;transition:color .25s;}
+    .toc-list a:hover{color:var(--fg);}
 
-    .s-label{font-family:'Cinzel',serif;font-size:.63rem;letter-spacing:.5em;text-transform:uppercase;color:var(--hearth-amber);margin-bottom:12px;display:flex;align-items:center;gap:10px;}
-    .s-label::before{content:'';display:block;width:28px;height:1px;background:var(--ember-orange);}
-    .s-title{font-family:'Cinzel',serif;font-size:clamp(1.5rem,3vw,2.6rem);font-weight:700;color:var(--cream);margin-bottom:16px;}
-    .s-title span{background:linear-gradient(90deg,var(--flame-gold),var(--ember-orange));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-    .s-desc{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-style:italic;color:var(--cream-dim);max-width:560px;line-height:1.75;margin-bottom:70px;}
+    /* MAIN */
+    .gs{position:relative;z-index:2;background:linear-gradient(180deg,var(--bk),var(--ab) 60%,var(--bk));}
+    .gw{max-width:1200px;margin:0 auto;padding:90px 60px 120px;}
 
-    /* GAME CARDS */
-    .games-grid{display:flex;flex-direction:column;gap:3px;}
+    /* section header */
+    .sh{margin-bottom:52px;}
+    .sl{font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.5em;text-transform:uppercase;color:var(--ha);margin-bottom:10px;display:flex;align-items:center;gap:10px;}
+    .sl::before{content:'';display:block;width:28px;height:1px;background:var(--eo);}
+    .st{font-family:'Cinzel',serif;font-size:clamp(1.6rem,3vw,2.6rem);font-weight:700;color:var(--cr);margin-bottom:12px;}
+    .st span{background:linear-gradient(90deg,var(--fg),var(--eo));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .sd{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:var(--cd);line-height:1.75;max-width:600px;}
 
-    .game-card{position:relative;display:grid;grid-template-columns:380px 1fr;overflow:hidden;background:rgba(42,21,6,.45);border:1px solid rgba(245,166,35,.07);transition:border-color .5s,background .5s;min-height:300px;}
-    .game-card:nth-child(even){grid-template-columns:1fr 380px;}
-    .game-card:hover{border-color:rgba(245,166,35,.28);background:rgba(50,25,8,.7);}
+    /* divider */
+    .gdiv{display:flex;align-items:center;gap:16px;margin:80px 0 68px;}
+    .gdiv-l{flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(245,166,35,.3));}
+    .gdiv-r{flex:1;height:1px;background:linear-gradient(90deg,rgba(245,166,35,.3),transparent);}
+    .gdiv-t{font-family:'Cinzel',serif;font-size:.55rem;letter-spacing:.5em;text-transform:uppercase;color:var(--sm);white-space:nowrap;padding:0 8px;}
 
-    /* visual panel */
-    .game-visual{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;}
-    .game-card:nth-child(even) .game-visual{order:2;}
-    .game-card:nth-child(even) .game-info{order:1;}
+    /* ── WORD CARDS ── */
+    .wgrid{display:flex;flex-direction:column;gap:3px;}
 
-    .game-visual-bg{position:absolute;inset:0;transition:transform .7s ease,filter .5s;}
-    .game-card:hover .game-visual-bg{transform:scale(1.06);}
-    .game-visual-overlay{position:absolute;inset:0;z-index:1;}
-    .game-big-icon{position:relative;z-index:2;font-size:7rem;filter:drop-shadow(0 0 40px rgba(245,166,35,.4));transition:transform .5s ease,filter .5s;}
-    .game-card:hover .game-big-icon{transform:scale(1.08) translateY(-6px);filter:drop-shadow(0 0 70px rgba(245,166,35,.7));}
+    .wc{background:rgba(42,21,6,.5);border:1px solid rgba(245,166,35,.07);padding:44px 48px;position:relative;overflow:hidden;display:grid;grid-template-columns:72px 1fr;gap:0 36px;align-items:start;transition:background .4s,border-color .4s;cursor:none;}
+    .wc::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--fg),transparent);transform:scaleX(0);transform-origin:center;transition:transform .65s;}
+    .wc:hover::after{transform:scaleX(1);}
+    .wc:hover{background:rgba(58,31,10,.72);border-color:rgba(245,166,35,.25);}
 
-    /* 3D canvas per card */
-    .game-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;}
+    .wc-left{display:flex;flex-direction:column;align-items:center;padding-top:4px;}
+    .wc-num{font-family:'Cinzel',serif;font-size:.58rem;letter-spacing:.3em;color:var(--sm);writing-mode:vertical-rl;transform:rotate(180deg);margin-bottom:14px;}
+    .wc-ico{font-size:2rem;filter:drop-shadow(0 0 12px rgba(245,166,35,.2));transition:filter .4s,transform .4s;}
+    .wc:hover .wc-ico{filter:drop-shadow(0 0 24px rgba(245,166,35,.6));transform:scale(1.15) translateY(-3px);}
 
-    /* info panel */
-    .game-info{padding:48px 52px;display:flex;flex-direction:column;justify-content:center;gap:18px;position:relative;}
-    .game-info::before{content:'';position:absolute;top:0;bottom:0;left:0;width:1px;background:linear-gradient(180deg,transparent,rgba(245,166,35,.2),transparent);}
-    .game-card:nth-child(even) .game-info::before{left:auto;right:0;}
+    .wc-right{}
+    .wc-title{font-family:'Cinzel',serif;font-size:1.15rem;font-weight:700;color:var(--cr);margin-bottom:18px;letter-spacing:.04em;}
+    .wc-body{font-family:'Cormorant Garamond',serif;font-size:1.02rem;color:var(--cd);line-height:1.88;}
+    .wc-body em{color:var(--fg);font-style:normal;font-weight:600;}
+    .wc-body p{margin-bottom:12px;}
+    .wc-body p:last-child{margin-bottom:0;}
+    .wc-body ul{list-style:none;display:flex;flex-direction:column;gap:5px;margin:10px 0 12px 0;}
+    .wc-body ul li{display:flex;align-items:baseline;gap:10px;}
+    .wc-body ul li::before{content:'✦';font-size:.55rem;color:var(--fg);flex-shrink:0;opacity:.6;margin-top:3px;}
+    .wc-tag{display:inline-flex;align-items:center;gap:6px;font-family:'Cinzel',serif;font-size:.54rem;letter-spacing:.22em;text-transform:uppercase;color:var(--fg);border:1px solid rgba(245,166,35,.22);padding:4px 12px;margin-top:18px;}
 
-    .game-badge{display:inline-flex;align-items:center;gap:8px;font-family:'Cinzel',serif;font-size:.58rem;letter-spacing:.3em;text-transform:uppercase;padding:4px 12px;border:1px solid;width:fit-content;}
-    .game-number{font-family:'Cinzel',serif;font-size:5rem;font-weight:900;line-height:.9;color:rgba(245,166,35,.06);position:absolute;top:28px;right:36px;letter-spacing:-.04em;user-select:none;}
-    .game-card:nth-child(even) .game-number{right:auto;left:36px;}
+    /* ── BOT CARDS ── */
+    .bgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;}
+    .bc{background:rgba(42,21,6,.5);border:1px solid rgba(245,166,35,.07);padding:48px 36px;text-align:center;position:relative;overflow:hidden;transition:background .4s,border-color .4s;cursor:none;}
+    .bc::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--fg),transparent);transform:scaleX(0);transition:transform .6s;}
+    .bc:hover::after{transform:scaleX(1);}
+    .bc:hover{background:rgba(58,31,10,.72);border-color:rgba(245,166,35,.25);}
+    .bc-ico{font-size:3rem;display:block;margin-bottom:20px;filter:drop-shadow(0 0 14px rgba(245,166,35,.2));transition:filter .4s,transform .4s;}
+    .bc:hover .bc-ico{filter:drop-shadow(0 0 32px rgba(245,166,35,.65));transform:scale(1.12) translateY(-5px);}
+    .bc-title{font-family:'Cinzel',serif;font-size:1.1rem;font-weight:700;color:var(--cr);margin-bottom:14px;}
+    .bc-text{font-family:'Cormorant Garamond',serif;font-size:.96rem;color:var(--cd);line-height:1.78;font-style:italic;}
+    .bc-badge{display:inline-block;font-family:'Cinzel',serif;font-size:.52rem;letter-spacing:.22em;text-transform:uppercase;color:var(--bk);background:linear-gradient(90deg,var(--fg),var(--eo));padding:4px 12px;margin-top:18px;}
 
-    .game-title{font-family:'Cinzel',serif;font-size:clamp(1.6rem,3vw,2.4rem);font-weight:900;line-height:1;letter-spacing:-.01em;}
-    .game-tagline{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:var(--cream-dim);line-height:1.65;}
-    .game-tagline em{font-style:normal;}
+    /* ── EXTERNAL CARDS ── */
+    .egrid{display:flex;flex-direction:column;gap:3px;}
+    .ec{background:rgba(42,21,6,.5);border:1px solid rgba(245,166,35,.07);padding:52px 52px 48px;position:relative;overflow:hidden;transition:background .4s,border-color .4s;cursor:none;}
+    .ec::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--fg),transparent);transform:scaleX(0);transform-origin:center;transition:transform .7s;}
+    .ec:hover::before{transform:scaleX(1);}
+    .ec:hover{background:rgba(58,31,10,.72);border-color:rgba(245,166,35,.25);}
+    .ec-head{display:flex;align-items:center;gap:24px;margin-bottom:28px;}
+    .ec-num{font-family:'Cinzel',serif;font-size:3.5rem;font-weight:900;line-height:1;background:linear-gradient(135deg,var(--gl),var(--fg));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;opacity:.28;transition:opacity .4s;flex-shrink:0;}
+    .ec:hover .ec-num{opacity:.65;}
+    .ec-hright{}
+    .ec-ico{font-size:1.5rem;margin-bottom:6px;display:block;}
+    .ec-title{font-family:'Cinzel',serif;font-size:1.2rem;font-weight:700;color:var(--cr);letter-spacing:.04em;}
+    .ec-body{font-family:'Cormorant Garamond',serif;font-size:1.02rem;color:var(--cd);line-height:1.9;}
+    .ec-body em{color:var(--fg);font-style:normal;font-weight:600;}
+    .ec-body p{margin-bottom:14px;}
+    .ec-body p:last-child{margin-bottom:0;}
+    .ec-body ul{list-style:none;display:flex;flex-direction:column;gap:6px;margin:10px 0 14px 16px;}
+    .ec-body ul li{display:flex;align-items:baseline;gap:10px;}
+    .ec-body ul li::before{content:'◆';font-size:.45rem;color:var(--fg);flex-shrink:0;opacity:.5;}
+    .ec-req{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px;}
+    .ec-req span{font-family:'Cinzel',serif;font-size:.52rem;letter-spacing:.18em;text-transform:uppercase;padding:4px 12px;border:1px solid rgba(245,166,35,.22);color:var(--ha);}
 
-    .game-divider{width:60px;height:1px;background:linear-gradient(90deg,var(--ember-orange),transparent);}
+    .reveal{opacity:0;transform:translateY(20px);transition:opacity .75s,transform .75s;}
+    .reveal.visible{opacity:1;transform:none;}
 
-    .game-desc{font-family:'Philosopher',serif;font-size:.88rem;line-height:1.85;color:var(--cream-dim);}
-    .game-desc strong{color:var(--cream);}
-
-    .game-meta{display:flex;gap:20px;flex-wrap:wrap;margin-top:4px;}
-    .game-meta-item{display:flex;align-items:center;gap:8px;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--smoke);}
-    .game-meta-item span{color:var(--soft-amber);}
-
-    /* Крокодил — зелёный */
-    .gc-croc .game-visual-bg{background:radial-gradient(ellipse 70% 80% at 40% 60%,rgba(74,160,80,.35) 0%,transparent 65%),linear-gradient(135deg,#071208,#0d2410,#051008);}
-    .gc-croc .game-visual-overlay{background:linear-gradient(90deg,transparent 50%,rgba(13,7,3,.85) 100%);}
-    .gc-croc:nth-child(even) .game-visual-overlay{background:linear-gradient(270deg,transparent 50%,rgba(13,7,3,.85) 100%);}
-    .gc-croc .game-badge{color:#5dba64;border-color:rgba(93,186,100,.3);background:rgba(93,186,100,.06);}
-    .gc-croc .game-title{background:linear-gradient(135deg,#a8e6ab,#5dba64);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-    .gc-croc .game-divider{background:linear-gradient(90deg,#5dba64,transparent);}
-    .gc-croc .game-tagline em{color:#a8e6ab;}
-
-    /* Бункер — серо-стальной */
-    .gc-bunker .game-visual-bg{background:radial-gradient(ellipse 70% 80% at 50% 50%,rgba(80,100,120,.4) 0%,transparent 65%),linear-gradient(135deg,#080c10,#101820,#080c10);}
-    .gc-bunker .game-visual-overlay{background:linear-gradient(270deg,transparent 50%,rgba(13,7,3,.85) 100%);}
-    .gc-bunker .game-badge{color:#7aaccc;border-color:rgba(122,172,204,.3);background:rgba(122,172,204,.06);}
-    .gc-bunker .game-title{background:linear-gradient(135deg,#b8d8f0,#7aaccc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-    .gc-bunker .game-divider{background:linear-gradient(90deg,#7aaccc,transparent);}
-    .gc-bunker .game-tagline em{color:#b8d8f0;}
-
-    /* Мафия — красно-тёмный */
-    .gc-mafia .game-visual-bg{background:radial-gradient(ellipse 70% 80% at 40% 60%,rgba(160,30,30,.45) 0%,transparent 65%),linear-gradient(135deg,#120408,#200808,#100408);}
-    .gc-mafia .game-visual-overlay{background:linear-gradient(90deg,transparent 50%,rgba(13,7,3,.85) 100%);}
-    .gc-mafia .game-badge{color:#e87070;border-color:rgba(232,112,112,.3);background:rgba(232,112,112,.06);}
-    .gc-mafia .game-title{background:linear-gradient(135deg,#ffb8b8,#e87070);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-    .gc-mafia .game-divider{background:linear-gradient(90deg,#e87070,transparent);}
-    .gc-mafia .game-tagline em{color:#ffb8b8;}
-
-    /* Жабки — жёлто-зелёный */
-    .gc-frog .game-visual-bg{background:radial-gradient(ellipse 70% 80% at 50% 50%,rgba(120,200,60,.35) 0%,transparent 65%),linear-gradient(135deg,#081408,#102008,#081008);}
-    .gc-frog .game-visual-overlay{background:linear-gradient(270deg,transparent 50%,rgba(13,7,3,.85) 100%);}
-    .gc-frog .game-badge{color:#aadd55;border-color:rgba(170,221,85,.3);background:rgba(170,221,85,.06);}
-    .gc-frog .game-title{background:linear-gradient(135deg,#d4ff88,#aadd55);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-    .gc-frog .game-divider{background:linear-gradient(90deg,#aadd55,transparent);}
-    .gc-frog .game-tagline em{color:#d4ff88;}
-
-    /* REVEAL */
-    .reveal{opacity:0;transform:translateY(24px);transition:opacity .8s ease,transform .8s ease;}
-    .reveal.visible{opacity:1;transform:translateY(0);}
-    .d1{transition-delay:.1s;}.d2{transition-delay:.2s;}
-
-    /* FOOTER */
-    footer{background:var(--black);border-top:1px solid rgba(245,166,35,.1);position:relative;z-index:2;padding:32px 60px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
-    .footer-logo{font-family:'Cinzel',serif;font-size:.9rem;font-weight:900;color:var(--flame-gold);letter-spacing:.12em;text-decoration:none;}
-    footer p{font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--smoke);}
-    footer p span{color:var(--hearth-amber);}
+    footer{background:var(--bk);border-top:1px solid rgba(245,166,35,.1);z-index:2;padding:32px 60px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;}
+    .flo{font-family:'Cinzel',serif;font-size:.9rem;font-weight:900;color:var(--fg);letter-spacing:.12em;text-decoration:none;}
+    footer p{font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--sm);}
+    footer p span{color:var(--ha);}
     body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9997;opacity:.4;mix-blend-mode:overlay;}
+
     @media(max-width:900px){
-      nav{padding:14px 24px;}.nav-links{display:none;}
-      .games-wrap{padding:60px 20px 80px;}
-      .game-card,.game-card:nth-child(even){grid-template-columns:1fr;min-height:auto;}
-      .game-visual{height:220px;}
-      .game-card:nth-child(even) .game-visual{order:1;}
-      .game-card:nth-child(even) .game-info{order:2;}
-      .game-info{padding:32px 28px;}
+      nav{padding:14px 24px;}.nls{display:none;}
+      .gw{padding:50px 20px 80px;}
+      .toc-wrap{grid-template-columns:1fr;padding:36px 20px;}
+      .wc{grid-template-columns:1fr;padding:32px 24px;}
+      .wc-left{flex-direction:row;margin-bottom:14px;}
+      .wc-num{writing-mode:horizontal-tb;transform:none;margin-bottom:0;margin-right:10px;}
+      .bgrid{grid-template-columns:1fr;}
+      .ec{padding:36px 24px;}
       footer{padding:24px;}
     }
   </style>
 </head>
 <body>
-
 <div id="cursor"></div>
 <div id="cursor-ring"></div>
 <canvas id="particles"></canvas>
 
 <nav>
-  <a href="index.html" class="nav-logo"><div class="nav-dot"></div>Дом Очага</a>
-  <ul class="nav-links">
+  <a href="index.html" class="nl"><div class="nd"></div>Дом Очага</a>
+  <ul class="nls">
     <li><a href="index.html">Главная</a></li>
     <li><a href="roles.html">Роли</a></li>
     <li><a href="games.html" class="cur">Игры</a></li>
+    <li><a href="tiktok.html">Тик Ток</a></li>
     <li><a href="rules.html">Правила</a></li>
   </ul>
-  <div class="nav-right">by <b>dernocist</b> & <b>doctocist</b></div>
+  <div class="nr">by <b>dernocist</b> & <b>doctocist</b></div>
 </nav>
 
-<!-- HERO -->
-<section class="page-hero">
-  <canvas id="hero-canvas"></canvas>
-  <div class="hero-bg"></div>
-  <div class="hero-vignette"></div>
-  <div class="fire-base"></div>
-  <div class="hero-inner">
-    <div class="hero-eyebrow">Повести Дома Очага · Развлечения</div>
-    <h1 class="hero-title">
-      <span class="ht-1">Игры</span>
-      <span class="ht-2">Флуда</span>
-    </h1>
-    <div class="hero-divider">
-      <div class="hdiv-line"></div><div class="hdiv-gem"></div>
-      <div class="hdiv-line"></div><div class="hdiv-gem"></div>
-      <div class="hdiv-line"></div>
-    </div>
-    <p class="hero-sub">Вечер у очага — это не только <em>истории</em>. Это смех, интриги, тайны и квакание.</p>
+<section class="ph">
+  <canvas id="hc"></canvas>
+  <div class="hbg"></div><div class="hv"></div><div class="fb"></div>
+  <div class="hi">
+    <div class="ey">Повести Дома Очага · 24 февраля 2026</div>
+    <h1 class="ht"><span class="h1">Игры</span><span class="h2">Флуда</span></h1>
+    <div class="hdv"><div class="dl"></div><div class="dg"></div><div class="dl"></div><div class="dg"></div><div class="dl"></div></div>
+    <p class="hs">Игры — неотъемлемая часть досуга во флуде. Здесь собраны <em>все правила</em> — от словесных забав до баталий на сторонних сайтах.</p>
   </div>
 </section>
 
-<!-- GAMES -->
-<section class="games-section">
-  <div class="games-wrap">
+<!-- TOC -->
+<div class="toc-sec">
+  <div class="toc-wrap">
+    <div class="toc-col reveal">
+      <span class="toc-ico">🗣️</span>
+      <div class="toc-head">Категория I</div>
+      <div class="toc-title">Словесные игры</div>
+      <ul class="toc-list">
+        <li><a href="#word">Я никогда не...</a></li>
+        <li><a href="#word">Две правды, одна ложь</a></li>
+        <li><a href="#word">Слушаем и не осуждаем</a></li>
+        <li><a href="#word">Угадай, что у меня в руках</a></li>
+        <li><a href="#word">Я беру с собой в поход</a></li>
+        <li><a href="#word">Паранойя</a></li>
+        <li><a href="#word">Буквенный переворот</a></li>
+        <li><a href="#word">Принцесса</a></li>
+      </ul>
+    </div>
+    <div class="toc-col reveal" style="transition-delay:.1s">
+      <span class="toc-ico">🤖</span>
+      <div class="toc-head">Категория II</div>
+      <div class="toc-title">Игры с ботами</div>
+      <ul class="toc-list">
+        <li><a href="#bots">УНО</a></li>
+        <li><a href="#bots">Крокодил</a></li>
+        <li><a href="#bots">Мафия</a></li>
+      </ul>
+    </div>
+    <div class="toc-col reveal" style="transition-delay:.2s">
+      <span class="toc-ico">🌐</span>
+      <div class="toc-head">Категория III</div>
+      <div class="toc-title">Сторонние сайты</div>
+      <ul class="toc-list">
+        <li><a href="#external">Бункер</a></li>
+        <li><a href="#external">Among Us</a></li>
+        <li><a href="#external">Гартик</a></li>
+        <li><a href="#external">Роблокс</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
 
-    <div class="s-label reveal">Наши игры</div>
-    <h2 class="s-title reveal d1">Чем мы <span>играем</span></h2>
-    <p class="s-desc reveal d2">Четыре игры, которые собирают Дом Очага вместе — от тихих угадываний до ночных заговоров.</p>
+<section class="gs">
+  <div class="gw">
 
-    <!-- КРОКОДИЛ -->
-    <div class="game-card gc-croc reveal" id="croc">
-      <div class="game-visual">
-        <canvas class="game-canvas" data-game="croc"></canvas>
-        <div class="game-visual-bg"></div>
-        <div class="game-visual-overlay"></div>
-        <div class="game-big-icon">🐊</div>
+    <!-- ══ I. СЛОВЕСНЫЕ ══ -->
+    <div id="word">
+      <div class="sh reveal">
+        <div class="sl">Категория I</div>
+        <div class="st"><span>Словесные</span> игры</div>
+        <div class="sd">Никаких приложений, никаких ботов — только слова, воображение и хорошая компания.</div>
       </div>
-      <div class="game-info">
-        <div class="game-number">01</div>
-        <div class="game-badge">🐊 Угадай слово</div>
-        <div class="game-title">Крокодил</div>
-        <div class="game-tagline">Объясняй без слов — <em>покажи всё телом</em></div>
-        <div class="game-divider"></div>
-        <p class="game-desc">
-          Один участник объясняет слово или фразу жестами, мимикой и движениями — <strong>без единого слова</strong>. Остальные пытаются угадать. Чем безумнее объяснение, тем веселее.
-          <br><br>Во флуде играем в текстовом формате: ведущий описывает слово <strong>через ассоциации и загадки</strong>, не называя его напрямую.
-        </p>
-        <div class="game-meta">
-          <div class="game-meta-item">👥 <span>3+ участников</span></div>
-          <div class="game-meta-item">⏱ <span>15–30 минут</span></div>
-          <div class="game-meta-item">😂 <span>Весёлая</span></div>
+      <div class="wgrid">
+
+        <div class="wc reveal">
+          <div class="wc-left">
+            <div class="wc-num">01</div>
+            <div class="wc-ico">🙅</div>
+          </div>
+          <div class="wc-right">
+            <div class="wc-title">Я никогда не...</div>
+            <div class="wc-body">
+              <p>В начале игры всем участникам выдаётся <em>10 баллов</em>. Создаётся список игроков, и игра идёт по списку.</p>
+              <p>Первый участник пишет в чат то, чего никогда не делал / испытывал / проживал. Например: <em>«я никогда не была за границей»</em> или <em>«я никогда не ел корейскую кухню»</em>.</p>
+              <p>Те, кто это проживал — вычитают у себя балл и пишут оставшееся количество в ответ на сообщение. После очередь переходит к следующему по списку. <em>Первый, кто лишится всех баллов — проиграл.</em></p>
+            </div>
+            <div class="wc-tag">👥 По очереди · 10 баллов</div>
+          </div>
+        </div>
+
+        <div class="wc reveal">
+          <div class="wc-left">
+            <div class="wc-num">02</div>
+            <div class="wc-ico">🤔</div>
+          </div>
+          <div class="wc-right">
+            <div class="wc-title">Две правды, одна ложь</div>
+            <div class="wc-body">
+              <p>Участники создают список, и игра идёт по очереди. Участник пишет <em>три факта о себе</em> — два правдивых, один ложный. Например:</p>
+              <ul>
+                <li>У меня зелёные глаза</li>
+                <li>Я никогда не смотрел Симпсонов</li>
+                <li>У меня есть татуировки</li>
+              </ul>
+              <p>Остальные угадывают ложь. <em>Кто угадал первым — получает балл.</em> Побеждает тот, кто в конце набрал больше всех.</p>
+            </div>
+            <div class="wc-tag">🏆 На очки</div>
+          </div>
+        </div>
+
+        <div class="wc reveal">
+          <div class="wc-left">
+            <div class="wc-num">03</div>
+            <div class="wc-ico">💬</div>
+          </div>
+          <div class="wc-right">
+            <div class="wc-title">Слушаем и не осуждаем</div>
+            <div class="wc-body">
+              <p>Суть игры — <em>лучше узнать друг друга</em> и найти людей со схожими мнениями. Участники по очереди пишут в чат своё мнение, которое считается спорным или сомнительным.</p>
+              <p>Например: <em>«Я считаю, что доступ к соцсетям стоит давать только после 14 лет»</em>. Участник может обосновать своё мнение по желанию.</p>
+              <p>Остальные выражают согласие или несогласие, могут немного подискутировать, не выходя за рамки правил чата.</p>
+            </div>
+            <div class="wc-tag">💭 Без победителей</div>
+          </div>
+        </div>
+
+        <div class="wc reveal">
+          <div class="wc-left">
+            <div class="wc-num">04</div>
+            <div class="wc-ico">🖐️</div>
+          </div>
+          <div class="wc-right">
+            <div class="wc-title">Угадай, что у меня в руках</div>
+            <div class="wc-body">
+              <p>Ведущий выбирает любую вещь, берёт её в руки и <em>кратко описывает её в чате</em>. Например: <em>«У меня в руках жёлтая, мягкая, полукруглая вещь»</em>.</p>
+              <p>Задача участников — угадать вещь, задавая наводящие вопросы: <em>«Эта вещь объёмная? Какая форма? Тяжёлая?»</em></p>
+              <p>Участник, <em>первым назвавший правильно</em>, становится следующим ведущим.</p>
+            </div>
+            <div class="wc-tag">🔍 Загадки</div>
+          </div>
+        </div>
+
+        <div class="wc reveal">
+          <div class="wc-left">
+            <div class="wc-num">05</div>
+            <div class="wc-ico">🎒</div>
+          </div>
+          <div class="wc-right">
+            <div class="wc-title">Я беру с собой в поход</div>
+            <div class="wc-body">
+              <p>Ведущий загадывает <em>категорию вещей</em> и пишет пример: <em>«Я иду в поход и беру с собой голубику»</em> (категория: только синие вещи).</p>
+              <p>Задача остальных — угадать категорию, задавая наводящие вопросы: <em>«Ты можешь взять с собой клубнику?»</em></p>
+              <p>Участник, <em>первый отгадавший категорию</em>, становится следующим ведущим.</p>
+            </div>
+            <div class="wc-tag">🌲 Категории</div>
+          </div>
+        </div>
+
+        <div class="wc reveal">
+          <div class="wc-left">
+            <div class="wc-num">06</div>
+            <div class="wc-ico">😨</div>
+          </div>
+          <div class="wc-right">
+            <div class="wc-title">Паранойя</div>
+            <div class="wc-body">
+              <p>Первый участник задаёт любому игроку в <em>лс / с помощью шёпота</em> вопрос, ответом на который является кто-то из игроков. Например: <em>«С кем бы ты хотел встретиться в реальной жизни?»</em></p>
+              <p>Игрок, которому задан вопрос, тэгает ответ в чат. Участник, ставший ответом, <em>может попытаться узнать вопрос</em> — для этого нужно выполнить любое желание отвечавшего.</p>
+              <p>Если он не хочет — это может сделать <em>любой другой игрок</em>, также выполнив желание. Роль задающего передаётся по списку.</p>
+            </div>
+            <div class="wc-tag">🔐 Интрига</div>
+          </div>
+        </div>
+
+        <div class="wc reveal">
+          <div class="wc-left">
+            <div class="wc-num">07</div>
+            <div class="wc-ico">🔤</div>
+          </div>
+          <div class="wc-right">
+            <div class="wc-title">Буквенный переворот</div>
+            <div class="wc-body">
+              <p>Участник называет любое слово. Следующий меняет <em>ровно одну букву</em> и называет новое слово. И так по кругу.</p>
+              <ul>
+                <li>Дом → Том → Ром → Рот → Кот → Кит → Ким...</li>
+              </ul>
+              <p>Кто не может продолжить цепочку — <em>выбывает</em>.</p>
+            </div>
+            <div class="wc-tag">📝 Цепочка</div>
+          </div>
+        </div>
+
+        <div class="wc reveal">
+          <div class="wc-left">
+            <div class="wc-num">08</div>
+            <div class="wc-ico">👸</div>
+          </div>
+          <div class="wc-right">
+            <div class="wc-title">Принцесса</div>
+            <div class="wc-body">
+              <p>С помощью <em>рандомайзера</em> выбирается Принцесса — остальные становятся Принцами. Принцесса задаёт различные вопросы, на которые Принцы отвечают в развёрнутом виде <em>в лс</em>.</p>
+              <p>Ответы выкладываются в игровой чат с нумерацией: <em>Принц 1, Принц 2...</em> — без имён. Принцесса выбирает ответ, который ей не нравится больше остальных — <em>этот Принц вылетает.</em></p>
+              <p>Игра продолжается <em>до последнего Принца.</em></p>
+            </div>
+            <div class="wc-tag">👑 Выбывание</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- DIVIDER -->
+    <div class="gdiv reveal">
+      <div class="gdiv-l"></div>
+      <div class="gdiv-t">✦ Игры при поддержке ботов ✦</div>
+      <div class="gdiv-r"></div>
+    </div>
+
+    <!-- ══ II. БОТЫ ══ -->
+    <div id="bots">
+      <div class="sh reveal">
+        <div class="sl">Категория II</div>
+        <div class="st">Игры с <span>ботами</span></div>
+        <div class="sd">Боты находятся в игровом чате. Играть можно в любое время, если собралась компания. Для созыва через Калл — нужно разрешение админа.</div>
+      </div>
+      <div class="bgrid">
+        <div class="bc reveal">
+          <span class="bc-ico">🃏</span>
+          <div class="bc-title">УНО</div>
+          <div class="bc-text">Классические карточные гонки. Накидывай карты, объявляй УНО и не попадайся с полной рукой в конце раунда.</div>
+          <div class="bc-badge">Бот в чате</div>
+        </div>
+        <div class="bc reveal" style="transition-delay:.1s">
+          <span class="bc-ico">🐊</span>
+          <div class="bc-title">Крокодил</div>
+          <div class="bc-text">Объясняй слово другими словами — без однокоренных, без жестов. Команда должна угадать как можно быстрее.</div>
+          <div class="bc-badge">Бот в чате</div>
+        </div>
+        <div class="bc reveal" style="transition-delay:.2s">
+          <span class="bc-ico">🔫</span>
+          <div class="bc-title">Мафия</div>
+          <div class="bc-text">Мирные жители против мафии. Вычисляй, блефуй, договаривайся — и выживи до конца игры.</div>
+          <div class="bc-badge">Бот в чате</div>
         </div>
       </div>
     </div>
 
-    <!-- БУНКЕР -->
-    <div class="game-card gc-bunker reveal" id="bunker">
-      <div class="game-visual">
-        <canvas class="game-canvas" data-game="bunker"></canvas>
-        <div class="game-visual-bg"></div>
-        <div class="game-visual-overlay"></div>
-        <div class="game-big-icon">🏚️</div>
-      </div>
-      <div class="game-info">
-        <div class="game-number">02</div>
-        <div class="game-badge">🏚️ Ролевая</div>
-        <div class="game-title">Бункер</div>
-        <div class="game-tagline">Конец света близко — <em>кто достоин выжить?</em></div>
-        <div class="game-divider"></div>
-        <p class="game-desc">
-          Апокалипсис. Бункер на всех не хватит. У каждого участника есть <strong>тайная карточка</strong>: профессия, здоровье, навыки, багаж и фобия. Нужно убедить остальных, что именно ты нужен человечеству.
-          <br><br>Голосованием решается, <strong>кого выгнать</strong> умирать снаружи. Стратегия, ложь и красноречие — твои лучшие союзники.
-        </p>
-        <div class="game-meta">
-          <div class="game-meta-item">👥 <span>5–15 участников</span></div>
-          <div class="game-meta-item">⏱ <span>40–90 минут</span></div>
-          <div class="game-meta-item">🧠 <span>Стратегическая</span></div>
-        </div>
-      </div>
+    <!-- DIVIDER -->
+    <div class="gdiv reveal">
+      <div class="gdiv-l"></div>
+      <div class="gdiv-t">✦ Игры на сторонних сайтах ✦</div>
+      <div class="gdiv-r"></div>
     </div>
 
-    <!-- МАФИЯ -->
-    <div class="game-card gc-mafia reveal" id="mafia">
-      <div class="game-visual">
-        <canvas class="game-canvas" data-game="mafia"></canvas>
-        <div class="game-visual-bg"></div>
-        <div class="game-visual-overlay"></div>
-        <div class="game-big-icon">🃏</div>
+    <!-- ══ III. САЙТЫ ══ -->
+    <div id="external">
+      <div class="sh reveal">
+        <div class="sl">Категория III</div>
+        <div class="st">Сторонние <span>сайты</span></div>
+        <div class="sd">Все игры требуют голосового чата. Правила каждой игры расписаны ниже.</div>
       </div>
-      <div class="game-info">
-        <div class="game-number">03</div>
-        <div class="game-badge">🃏 Детектив</div>
-        <div class="game-title">Мафия</div>
-        <div class="game-tagline">Город спит — <em>мафия не дремлет</em></div>
-        <div class="game-divider"></div>
-        <p class="game-desc">
-          Классика жанра. Среди мирных жителей скрываются <strong>мафиози</strong>. Ночью мафия выбирает жертву. Днём город голосует, кого казнить. Детектив ищет виновных. Доктор спасает невинных.
-          <br><br>Игра на <strong>доверие, блеф и дедукцию</strong>. Никому нельзя верить — даже лучшим друзьям.
-        </p>
-        <div class="game-meta">
-          <div class="game-meta-item">👥 <span>6–16 участников</span></div>
-          <div class="game-meta-item">⏱ <span>30–60 минут</span></div>
-          <div class="game-meta-item">🕵️ <span>Детективная</span></div>
-        </div>
-      </div>
-    </div>
+      <div class="egrid">
 
-    <!-- ЖАБКИ -->
-    <div class="game-card gc-frog reveal" id="frog">
-      <div class="game-visual">
-        <canvas class="game-canvas" data-game="frog"></canvas>
-        <div class="game-visual-bg"></div>
-        <div class="game-visual-overlay"></div>
-        <div class="game-big-icon">🐸</div>
-      </div>
-      <div class="game-info">
-        <div class="game-number">04</div>
-        <div class="game-badge">🐸 Ква-ква</div>
-        <div class="game-title">Жабки</div>
-        <div class="game-tagline">Просто <em>ква</em> — и весь флуд твой</div>
-        <div class="game-divider"></div>
-        <p class="game-desc">
-          Самая уютная игра флуда. Участники пишут только <strong>«ква»</strong> — но с разной интонацией, настроением и количеством букв. Флуд превращается в болото, а болото — в <strong>искусство</strong>.
-          <br><br>Победителей нет. Есть только <em>жабки</em> и бесконечное <strong>ква-ква-ква</strong> в ночи.
-        </p>
-        <div class="game-meta">
-          <div class="game-meta-item">👥 <span>Все участники</span></div>
-          <div class="game-meta-item">⏱ <span>Пока не надоест</span></div>
-          <div class="game-meta-item">🐸 <span>Ква</span></div>
+        <div class="ec reveal">
+          <div class="ec-head">
+            <div class="ec-num">01</div>
+            <div class="ec-hright">
+              <span class="ec-ico">🏚️</span>
+              <div class="ec-title">Бункер</div>
+            </div>
+          </div>
+          <div class="ec-body">
+            <p>Игра проходит на <em>сайте</em>, с голосовым чатом. Ведущий создаёт комнату, игроки заходят по коду, записав в качестве ника <em>свою роль</em>. Игра начинается при <em>не менее 6 игроках</em> (без ведущего).</p>
+            <p><em>Цель каждого</em> — обосновать, чем именно он будет полезен после катастрофы и почему его необходимо оставить в бункере.</p>
+            <p>В начале каждому выдаётся набор карточек: <em>Пол, Телосложение, Человеческая черта, Профессия, Здоровье, Хобби, Фобия, Инвентарь, Рюкзак, Доп. сведение, Спец. возможность.</em> В первом раунде каждый открывает <em>три черты</em> (две — если игроков больше 11): Профессию обязательно, остальные на выбор. Спец. возможность — не черта, её можно применить в любое время.</p>
+            <p>После раунда участники дискутируют и каждый называет игрока, который кажется ему <em>наименее полезным</em>. Выбранный может защититься. Затем ведущий проводит <em>голосование</em> — выбывает тот, кого большинство считает ненужным. Выбывший может использовать Спец. возможность, после чего открывает все оставшиеся карты.</p>
+            <p>Игра идёт до тех пор, пока в бункере не останется столько участников, <em>сколько мест в бункере</em> (3–7 в зависимости от числа игроков). Финальные игроки открывают все карты, и ведущий проверяет бункер на <em>«выживаемость»</em> — если проходят тест, победа за ними.</p>
+          </div>
+          <div class="ec-req">
+            <span>🎤 Голосовой чат</span>
+            <span>👥 от 6 игроков</span>
+            <span>🌐 Сайт</span>
+          </div>
         </div>
+
+        <div class="ec reveal">
+          <div class="ec-head">
+            <div class="ec-num">02</div>
+            <div class="ec-hright">
+              <span class="ec-ico">🚀</span>
+              <div class="ec-title">Among Us</div>
+            </div>
+          </div>
+          <div class="ec-body">
+            <p>Игра в приложении <em>Among Us</em>, с голосовым чатом. Ведущий создаёт лобби и скидывает код в чат.</p>
+            <p>После старта каждому случайно выпадает роль:</p>
+            <ul>
+              <li><em>Член экипажа</em> — выполняет задания</li>
+              <li><em>Следопыт</em> — может повесить маячок на игрока и следить за ним</li>
+              <li><em>Ангел-хранитель</em> — после смерти может защитить одного живого от Предателя</li>
+              <li><em>Инженер</em> — может прыгать в люки</li>
+              <li><em>Учёный</em> — имеет экран с пульсом всех участников</li>
+              <li><em>Паникёр</em> — после смерти обозначает место трупа для всех</li>
+              <li><em>Предатель</em> — убивает экипаж</li>
+              <li><em>Морф</em> — может превращаться в любого игрока</li>
+              <li><em>Призрак</em> — может становиться невидимым</li>
+            </ul>
+            <p><em>Задача экипажа</em> — вычислить предателей, выполняя задания. <em>Задача предателей</em> — уничтожить весь экипаж.</p>
+            <p>Также доступен режим <em>Пряток</em>: Предатель убивает всех, а экипаж прячется и выполняет задания.</p>
+          </div>
+          <div class="ec-req">
+            <span>🎤 Голосовой чат</span>
+            <span>📱 Приложение</span>
+          </div>
+        </div>
+
+        <div class="ec reveal">
+          <div class="ec-head">
+            <div class="ec-num">03</div>
+            <div class="ec-hright">
+              <span class="ec-ico">🎨</span>
+              <div class="ec-title">Гартик</div>
+            </div>
+          </div>
+          <div class="ec-body">
+            <p>Игра на <em>сайте</em>, с голосовым чатом. В начале каждого раунда выбирается <em>режим игры</em> — по его правилам участники рисуют или угадывают слова.</p>
+            <p>Данная игра <em>не имеет победителей и проигравших</em> — только веселье и атмосфера.</p>
+          </div>
+          <div class="ec-req">
+            <span>🎤 Голосовой чат</span>
+            <span>🌐 Сайт</span>
+            <span>🏆 Без победителей</span>
+          </div>
+        </div>
+
+        <div class="ec reveal">
+          <div class="ec-head">
+            <div class="ec-num">04</div>
+            <div class="ec-hright">
+              <span class="ec-ico">🎮</span>
+              <div class="ec-title">Роблокс</div>
+            </div>
+          </div>
+          <div class="ec-body">
+            <p>Игра в приложении <em>Roblox</em>, с голосовым чатом. Желающие участники находят <em>карту под количество игроков</em> и играют по правилам этой карты.</p>
+            <p>Формат каждый раз разный — зависит от выбранной карты.</p>
+          </div>
+          <div class="ec-req">
+            <span>🎤 Голосовой чат</span>
+            <span>🎮 Приложение</span>
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -328,149 +530,66 @@
 </section>
 
 <footer>
-  <a href="index.html" class="footer-logo">Дом Очага</a>
+  <a href="index.html" class="flo">Дом Очага</a>
   <p>© 2025–2026 · <span>Повести Дома Очага</span> · Fan project</p>
   <p>by <span>dernocist</span> & <span>doctocist</span></p>
 </footer>
 
 <script>
-/* CURSOR */
-const cur = document.getElementById('cursor'), ring = document.getElementById('cursor-ring');
+const CE=document.getElementById('cursor'),RE=document.getElementById('cursor-ring');
 let mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
-(function aR(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(aR);})();
-document.querySelectorAll('a,button,.game-card').forEach(el=>{
-  el.addEventListener('mouseenter',()=>{cur.style.transform='translate(-50%,-50%) scale(2)';ring.style.width='54px';ring.style.height='54px';});
-  el.addEventListener('mouseleave',()=>{cur.style.transform='translate(-50%,-50%) scale(1)';ring.style.width='34px';ring.style.height='34px';});
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;CE.style.left=mx+'px';CE.style.top=my+'px';});
+(function aR(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;RE.style.left=rx+'px';RE.style.top=ry+'px';requestAnimationFrame(aR);})();
+function sc(b){CE.style.transform=`translate(-50%,-50%) scale(${b?2:1})`;RE.style.width=b?'56px':'34px';RE.style.height=b?'56px':'34px';}
+document.querySelectorAll('a,button,.wc,.bc,.ec,.toc-col').forEach(el=>{
+  el.addEventListener('mouseenter',()=>sc(true));
+  el.addEventListener('mouseleave',()=>sc(false));
 });
 
-/* PARTICLES */
 const pC=document.getElementById('particles'),pX=pC.getContext('2d');
-function resP(){pC.width=innerWidth;pC.height=innerHeight;}resP();
-window.addEventListener('resize',resP);
+function resP(){pC.width=innerWidth;pC.height=innerHeight;}resP();window.addEventListener('resize',resP);
 const PC=['#F5A623','#E8621A','#FFD166','#C47A1E','#FF8C42'];
-class Ember{constructor(){this.r(true);}r(i=false){this.x=Math.random()*pC.width;this.y=i?Math.random()*pC.height:pC.height+10;this.vx=(Math.random()-.5)*.9;this.vy=-(Math.random()*1.3+.35);this.rad=Math.random()*2+.4;this.l=1;this.d=Math.random()*.004+.0018;this.c=PC[Math.floor(Math.random()*PC.length)];}u(){this.x+=this.vx;this.y+=this.vy;this.vx+=(Math.random()-.5)*.04;this.l-=this.d;if(this.l<=0||this.y<-10)this.r();}draw(){pX.save();pX.globalAlpha=this.l*.6;pX.fillStyle=this.c;pX.shadowColor=this.c;pX.shadowBlur=7;pX.beginPath();pX.arc(this.x,this.y,this.rad,0,Math.PI*2);pX.fill();pX.restore();}}
-const embers=Array.from({length:90},()=>new Ember());
+class Em{constructor(){this.r(true);}r(i){this.x=Math.random()*pC.width;this.y=i?Math.random()*pC.height:pC.height+10;this.vx=(Math.random()-.5)*.9;this.vy=-(Math.random()*1.3+.35);this.rad=Math.random()*2+.4;this.l=1;this.d=Math.random()*.004+.002;this.c=PC[Math.floor(Math.random()*PC.length)];}u(){this.x+=this.vx;this.y+=this.vy;this.vx+=(Math.random()-.5)*.04;this.l-=this.d;if(this.l<=0||this.y<-10)this.r();}draw(){pX.save();pX.globalAlpha=this.l*.6;pX.fillStyle=this.c;pX.shadowColor=this.c;pX.shadowBlur=7;pX.beginPath();pX.arc(this.x,this.y,this.rad,0,Math.PI*2);pX.fill();pX.restore();}}
+const embers=Array.from({length:90},()=>new Em());
 (function pt(){pX.clearRect(0,0,pC.width,pC.height);embers.forEach(e=>{e.u();e.draw();});requestAnimationFrame(pt);})();
 
-/* THREE.JS HERO */
 (function(){
-  const canvas=document.getElementById('hero-canvas');
-  const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});
-  renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setClearColor(0,0);
-  const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(55,2,.1,50);
-  camera.position.z=6;
-  function resize(){const p=canvas.parentElement;renderer.setSize(p.offsetWidth,p.offsetHeight);camera.aspect=p.offsetWidth/p.offsetHeight;camera.updateProjectionMatrix();}
+  const canvas=document.getElementById('hc');
+  const R=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});
+  R.setPixelRatio(Math.min(devicePixelRatio,2));R.setClearColor(0,0);
+  const S=new THREE.Scene(),C=new THREE.PerspectiveCamera(55,2,.1,50);C.position.z=6;
+  function resize(){const p=canvas.parentElement;R.setSize(p.offsetWidth,p.offsetHeight);C.aspect=p.offsetWidth/p.offsetHeight;C.updateProjectionMatrix();}
   resize();window.addEventListener('resize',resize);
-
-  // central gem
-  const geo=new THREE.DodecahedronGeometry(1.1,0);
-  const mat=new THREE.MeshStandardMaterial({color:0xC47A1E,wireframe:true,emissive:0xE8621A,emissiveIntensity:.25,transparent:true,opacity:.14});
-  const main=new THREE.Mesh(geo,mat);scene.add(main);
-
-  // floating mini icons as glowing orbs in 4 colors for 4 games
-  const gameColors=[0x5dba64,0x7aaccc,0xe87070,0xaadd55];
-  for(let i=0;i<20;i++){
-    const col=gameColors[i%4];
-    const g=new THREE.OctahedronGeometry(Math.random()*.06+.03,0);
-    const m=new THREE.MeshStandardMaterial({color:col,emissive:col,emissiveIntensity:.9,transparent:true,opacity:Math.random()*.5+.2});
-    const mesh=new THREE.Mesh(g,m);
-    const r=Math.random()*3.5+1.5,th=Math.random()*Math.PI*2,ph=Math.random()*Math.PI;
-    mesh.position.set(r*Math.sin(ph)*Math.cos(th),r*Math.sin(ph)*Math.sin(th),r*Math.cos(ph)-2);
-    mesh.userData={oy:mesh.position.y,ox:mesh.position.x,sp:Math.random()*.4+.15,ph:Math.random()*Math.PI*2};
-    scene.add(mesh);
-  }
-
-  // rings
-  [[2,.007,Math.PI/4,0,0xF5A623,.3],[2.8,.005,Math.PI/3,Math.PI/5,0x5dba64,.18],[3.5,.004,Math.PI/6,Math.PI/3,0xe87070,.15]].forEach(([r,t,rx,ry,col,op])=>{
+  const ico=new THREE.Mesh(new THREE.IcosahedronGeometry(1.2,1),new THREE.MeshStandardMaterial({color:0xC47A1E,wireframe:true,emissive:0xE8621A,emissiveIntensity:.2,transparent:true,opacity:.13}));S.add(ico);
+  [[1.9,.007,0,0,0xF5A623,.35],[2.7,.005,Math.PI/3,Math.PI/5,0x8B5CF6,.22],[3.3,.004,Math.PI/6,Math.PI/2.5,0x1A78C2,.18]].forEach(([r,t,rx,ry,col,op])=>{
     const m=new THREE.Mesh(new THREE.TorusGeometry(r,t,8,80),new THREE.MeshStandardMaterial({color:col,emissive:col,emissiveIntensity:.5,transparent:true,opacity:op}));
-    m.rotation.x=rx;m.rotation.y=ry;m.userData={sx:Math.random()*.004-.002,sy:Math.random()*.004-.002};scene.add(m);
+    m.rotation.x=rx;m.rotation.y=ry;m.userData={sx:Math.random()*.004-.002,sy:Math.random()*.004-.002};S.add(m);
   });
-
-  scene.add(new THREE.AmbientLight(0xF5A623,.35));
-  const pl=new THREE.PointLight(0xE8621A,2,10);pl.position.set(0,0,3);scene.add(pl);
-  const pl2=new THREE.PointLight(0x5dba64,.6,8);pl2.position.set(3,-1,2);scene.add(pl2);
-
-  let mX=0,mY=0;
+  for(let i=0;i<24;i++){
+    const cols=[0xF5A623,0xFFD166,0xE8621A,0x8B5CF6,0x1A78C2,0x3CB89A];
+    const s=new THREE.Mesh(new THREE.OctahedronGeometry(Math.random()*.05+.025,0),new THREE.MeshStandardMaterial({color:cols[i%6],emissive:cols[i%6],emissiveIntensity:.9,transparent:true,opacity:Math.random()*.5+.2}));
+    const r2=Math.random()*3.5+1.5,th=Math.random()*Math.PI*2,ph=Math.random()*Math.PI;
+    s.position.set(r2*Math.sin(ph)*Math.cos(th),r2*Math.sin(ph)*Math.sin(th),r2*Math.cos(ph)-2);
+    s.userData={oy:s.position.y,sp:Math.random()*.4+.15,ph:Math.random()*Math.PI*2};S.add(s);
+  }
+  S.add(new THREE.AmbientLight(0xF5A623,.35));
+  const pl=new THREE.PointLight(0xE8621A,2,10);pl.position.set(0,0,3);S.add(pl);
+  let mX=0,mY=0,t=0;
   document.addEventListener('mousemove',e=>{mX=(e.clientX/innerWidth-.5)*1.5;mY=-(e.clientY/innerHeight-.5)*1;});
-  let t=0;
   (function anim(){
     requestAnimationFrame(anim);t+=.007;
-    main.rotation.x+=.003;main.rotation.y+=.005;
-    scene.children.forEach(m=>{
+    ico.rotation.x+=.003;ico.rotation.y+=.005;
+    S.children.forEach(m=>{
       if(m.userData.sx){m.rotation.x+=m.userData.sx;m.rotation.y+=m.userData.sy;}
       if(m.userData.sp!==undefined){m.position.y=m.userData.oy+Math.sin(t*m.userData.sp+m.userData.ph)*.15;m.rotation.y+=.015;m.material.opacity=.2+Math.abs(Math.sin(t*m.userData.sp+m.userData.ph))*.45;}
     });
-    camera.position.x+=(mX*.3-camera.position.x)*.04;
-    camera.position.y+=(mY*.2-camera.position.y)*.04;
-    camera.lookAt(scene.position);
-    pl.intensity=1.8+Math.sin(t*2)*.5;
-    renderer.render(scene,camera);
+    C.position.x+=(mX*.3-C.position.x)*.04;C.position.y+=(mY*.2-C.position.y)*.04;C.lookAt(S.position);
+    pl.intensity=1.8+Math.sin(t*2)*.5;R.render(S,C);
   })();
 })();
 
-/* THREE.JS PER CARD */
-const GAME_CONFIGS={
-  croc:{color:0x5dba64,accent:0xa8e6ab,shapes:'ico'},
-  bunker:{color:0x7aaccc,accent:0xb8d8f0,shapes:'box'},
-  mafia:{color:0xe87070,accent:0xffb8b8,shapes:'oct'},
-  frog:{color:0xaadd55,accent:0xd4ff88,shapes:'sphere'},
-};
-
-document.querySelectorAll('.game-canvas').forEach(canvas=>{
-  const game=canvas.dataset.game;
-  const cfg=GAME_CONFIGS[game];
-  if(!cfg)return;
-
-  const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});
-  renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));renderer.setClearColor(0,0);
-  const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(50,1,.1,30);
-  camera.position.z=5;
-
-  function resize(){const p=canvas.parentElement;renderer.setSize(p.offsetWidth,p.offsetHeight);camera.aspect=p.offsetWidth/p.offsetHeight;camera.updateProjectionMatrix();}
-  resize();window.addEventListener('resize',resize);
-
-  // Main shape
-  let mainGeo;
-  if(cfg.shapes==='ico')mainGeo=new THREE.IcosahedronGeometry(1,0);
-  else if(cfg.shapes==='box')mainGeo=new THREE.BoxGeometry(1.4,1.4,1.4);
-  else if(cfg.shapes==='oct')mainGeo=new THREE.OctahedronGeometry(1.1,0);
-  else mainGeo=new THREE.SphereGeometry(1,8,8);
-
-  const mainMat=new THREE.MeshStandardMaterial({color:cfg.color,wireframe:true,emissive:cfg.color,emissiveIntensity:.3,transparent:true,opacity:.12});
-  const mainMesh=new THREE.Mesh(mainGeo,mainMat);scene.add(mainMesh);
-
-  // Particles
-  for(let i=0;i<14;i++){
-    const g=new THREE.OctahedronGeometry(Math.random()*.04+.02,0);
-    const m=new THREE.MeshStandardMaterial({color:cfg.accent,emissive:cfg.accent,emissiveIntensity:.8,transparent:true,opacity:Math.random()*.5+.2});
-    const s=new THREE.Mesh(g,m);
-    const r=Math.random()*2.5+1,th=Math.random()*Math.PI*2,ph=Math.random()*Math.PI;
-    s.position.set(r*Math.sin(ph)*Math.cos(th),r*Math.sin(ph)*Math.sin(th),r*Math.cos(ph));
-    s.userData={oy:s.position.y,sp:Math.random()*.3+.1,ph:Math.random()*Math.PI*2};
-    scene.add(s);
-  }
-
-  scene.add(new THREE.AmbientLight(cfg.color,.3));
-  const pl=new THREE.PointLight(cfg.color,1.5,8);pl.position.set(0,0,3);scene.add(pl);
-
-  let t=0;
-  (function anim(){
-    requestAnimationFrame(anim);t+=.008;
-    mainMesh.rotation.x+=.004;mainMesh.rotation.y+=.006;
-    scene.children.forEach(m=>{
-      if(m.userData.sp!==undefined){m.position.y=m.userData.oy+Math.sin(t*m.userData.sp+m.userData.ph)*.12;m.rotation.y+=.012;m.material.opacity=.15+Math.abs(Math.sin(t*m.userData.sp+m.userData.ph))*.4;}
-    });
-    pl.intensity=1.3+Math.sin(t*1.8)*.4;
-    renderer.render(scene,camera);
-  })();
-});
-
-/* REVEAL */
-const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});},{threshold:.08});
+const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});},{threshold:.06});
 document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
-
-/* NAV SHRINK */
 window.addEventListener('scroll',()=>{document.querySelector('nav').style.padding=scrollY>60?'11px 60px':'20px 60px';},{passive:true});
 </script>
 </body>
