@@ -49,7 +49,7 @@
     .nav-right b{color:var(--soft-amber);font-style:normal;}
 
     /* BURGER */
-    .burger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:none;padding:6px;z-index:600;}
+    .burger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:6px;z-index:600;}
     .burger span{display:block;width:24px;height:1.5px;background:var(--flame-gold);transition:transform .35s,opacity .25s,width .3s;transform-origin:center;}
     .burger.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg);}
     .burger.open span:nth-child(2){opacity:0;width:0;}
@@ -184,6 +184,31 @@
     .reveal{opacity:0;transform:translateY(24px);transition:opacity .75s ease,transform .75s ease;}
     .reveal.visible{opacity:1;transform:translateY(0);}
     .d1{transition-delay:.1s;}.d2{transition-delay:.2s;}.d3{transition-delay:.3s;}
+    /* reveal слева/справа */
+    .reveal-left{opacity:0;transform:translateX(-32px);transition:opacity .75s ease,transform .75s cubic-bezier(.2,.8,.3,1);}
+    .reveal-left.visible{opacity:1;transform:translateX(0);}
+    .reveal-right{opacity:0;transform:translateX(32px);transition:opacity .75s ease,transform .75s cubic-bezier(.2,.8,.3,1);}
+    .reveal-right.visible{opacity:1;transform:translateX(0);}
+    /* float-карточки */
+    .float-card{transition:transform .4s cubic-bezier(.2,.8,.3,1),box-shadow .4s;}
+    .float-card:hover{transform:translateY(-6px);}
+    /* timeline анимация — каждый элемент сдвигается */
+    .tl-item{opacity:0;transform:translateX(-18px);transition:opacity .6s ease,transform .6s cubic-bezier(.2,.8,.3,1);}
+    .tl-item.visible{opacity:1;transform:translateX(0);}
+    .tl-item:nth-child(1){transition-delay:.05s;}
+    .tl-item:nth-child(2){transition-delay:.18s;}
+    .tl-item:nth-child(3){transition-delay:.31s;}
+    /* новостной бейдж-пульс */
+    @keyframes badgePulse{0%,100%{box-shadow:0 0 0 0 rgba(245,166,35,.45);}60%{box-shadow:0 0 0 8px rgba(245,166,35,0);}}
+    .news-badge-new{animation:badgePulse 2.4s ease-in-out infinite;}
+    /* линия разделитель */
+    .sep-line{width:0;height:1px;background:linear-gradient(90deg,var(--ember-orange),transparent);transition:width 1.1s cubic-bezier(.4,0,.2,1);}
+    .sep-line.visible{width:100%;}
+    /* мигающая точка у новой записи */
+    @keyframes blinkDot{0%,100%{opacity:1;}50%{opacity:.2;}}
+    .new-dot{display:inline-block;width:6px;height:6px;background:var(--flame-gold);border-radius:50%;margin-right:8px;vertical-align:middle;animation:blinkDot 1.6s ease-in-out infinite;}
+    /* счётчик дней рождения в stat-карточке */
+    @keyframes countPop{0%{transform:scale(1);}50%{transform:scale(1.08);}100%{transform:scale(1);}}
 
     @media(max-width:900px){
       nav{padding:14px 24px;}
@@ -191,10 +216,13 @@
       .nav-right{display:none;}
       .burger{display:flex;}
       .section-wrap{padding:70px 24px;}
-      .stats-grid{grid-template-columns:1fr;}
+      .stats-grid{grid-template-columns:1fr 1fr;}
       .gallery-grid{grid-template-columns:1fr 1fr;grid-template-rows:auto;}
       .gallery-item:first-child{grid-row:span 1;}
       .footer-inner{grid-template-columns:1fr;gap:30px;}
+    }
+    @media(max-width:500px){
+      .stats-grid{grid-template-columns:1fr;}
     }
   </style>
 </head>
@@ -210,6 +238,7 @@
     <li><a href="roles.html">Роли</a></li>
     <li><a href="games.html">Игры</a></li>
     <li><a href="tiktok.html">Тик Ток</a></li>
+    <li><a href="birthdays.html">Дни рождения</a></li>
     <li><a href="rules.html">Правила</a></li>
   </ul>
   <div class="nav-right">by <b>dernocist</b> & <b>doctocist</b></div>
@@ -223,6 +252,7 @@
     <li><a href="roles.html" class="mob-link">Роли</a></li>
     <li><a href="games.html" class="mob-link">Игры</a></li>
     <li><a href="tiktok.html" class="mob-link">Тик Ток</a></li>
+    <li><a href="birthdays.html" class="mob-link">Дни рождения</a></li>
     <li><a href="rules.html" class="mob-link">Правила</a></li>
     <li><a href="#stats" class="mob-link">О нас</a></li>
     <li><a href="#gallery" class="mob-link">Галерея</a></li>
@@ -280,19 +310,19 @@
     <h2 class="s-title reveal d1">Наш <span>уютный уголок</span></h2>
     <p class="s-desc reveal d2">Каждая цифра — это живой человек, история или вечер у огня.</p>
     <div class="stats-grid">
-      <div class="stat-card reveal d1">
+      <div class="stat-card reveal-left d1 float-card">
         <span class="stat-icon">🏠</span>
         <div class="stat-number" data-count="28" data-suffix="">0</div>
         <div class="stat-label">Участников флуда</div>
         <div class="stat-sub">тёплых и родных</div>
       </div>
-      <div class="stat-card reveal d2">
+      <div class="stat-card reveal d2 float-card">
         <span class="stat-icon">💬</span>
         <div class="stat-number" data-count="500000" data-suffix="+">0</div>
         <div class="stat-label">Сообщений</div>
         <div class="stat-sub">слов, смеха и историй</div>
       </div>
-      <div class="stat-card reveal d3">
+      <div class="stat-card reveal d3 float-card">
         <span class="stat-icon">🕯️</span>
         <div class="stat-number" data-count="365" data-suffix="">0</div>
         <div class="stat-label">Дней вместе</div>
@@ -344,12 +374,25 @@
     <div class="s-label reveal">Хроника</div>
     <h2 class="s-title reveal d1">История <span>Дома Очага</span></h2>
     <p class="s-desc reveal d2">Главные вехи нашего пути — от первого огня до этих страниц.</p>
+
+    <!-- ПОСЛЕДНЯЯ НОВОСТЬ — Дни рождения -->
+    <div class="news-single reveal d1" style="margin-top:40px;">
+      <div class="news-badge news-badge-new" style="margin-right:10px;">Новое</div>
+      <div class="news-card-title" style="margin-top:14px;"><span class="new-dot"></span>Страница «Дни рождения» открыта</div>
+      <p class="news-card-text">На сайте появился новый раздел — <a href="birthdays.html" style="color:var(--flame-gold);text-decoration:none;">Дни рождения</a>. Теперь можно следить за праздниками всех 28 персонажей флуда: Арлекино, Альбедо, Кавех, Сяо и других жителей Тейвата. Страница автоматически считает, сколько дней осталось до ближайшего дня рождения.</p>
+      <div class="news-card-meta"><span>6 марта 2026</span> · dernocist & doctocist</div>
+    </div>
+
+    <div class="sep-line reveal" style="margin:36px 0;"></div>
+
+    <!-- ПРЕДЫДУЩАЯ НОВОСТЬ -->
     <div class="news-single reveal d1">
-      <div class="news-badge">Последнее</div>
-      <div class="news-card-title">Сайт Дома Очага открыл свои двери</div>
+      <div class="news-badge">Ранее</div>
+      <div class="news-card-title" style="margin-top:14px;">Сайт Дома Очага открыл свои двери</div>
       <p class="news-card-text">Спустя почти год совместного флуда, историй и тепла — у нашего дома наконец появился собственный очаг в сети. Здесь будут жить все повести, все герои и все воспоминания, которые мы создали вместе.</p>
       <div class="news-card-meta"><span>27 февраля 2026</span> · dernocist & doctocist</div>
     </div>
+
     <div class="timeline reveal d2" style="margin-top:60px;">
       <div class="tl-item">
         <div class="tl-date">27 марта 2025</div>
@@ -361,6 +404,11 @@
         <div class="tl-title">Открытие сайта</div>
         <div class="tl-text">337 дней спустя — у Дома Очага появился сайт. Теперь наши повести живут не только в чате, но и здесь — для всех, кто захочет погреться у огня.</div>
       </div>
+      <div class="tl-item">
+        <div class="tl-date">6 марта 2026</div>
+        <div class="tl-title">Страница дней рождений</div>
+        <div class="tl-text">Сайт пополнился разделом с днями рождения 28 персонажей. Теперь ни один праздник не останется незамеченным.</div>
+      </div>
     </div>
   </div>
 </section>
@@ -371,7 +419,16 @@
       <div class="footer-logo">Дом Очага</div>
       <p class="footer-tagline">Уютный флуд-проект по Genshin Impact.<br>Огонь здесь не гаснет никогда.</p>
     </div>
-    <div class="footer-links"></div>
+    <div class="footer-links">
+        <h4>Страницы</h4>
+        <ul>
+          <li><a href="roles.html">Роли</a></li>
+          <li><a href="games.html">Игры</a></li>
+          <li><a href="tiktok.html">Тик Ток</a></li>
+          <li><a href="birthdays.html">Дни рождения</a></li>
+          <li><a href="rules.html">Правила</a></li>
+        </ul>
+      </div>
     <div class="footer-authors">
       <h4>Авторы</h4>
       <div class="author-card">
@@ -496,16 +553,28 @@ document.querySelectorAll('.stat-card').forEach(card=>{
 });
 
 /* REVEAL */
-const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});},{threshold:.12});
-document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});},{threshold:.1});
+document.querySelectorAll('.reveal,.reveal-left,.reveal-right,.sep-line').forEach(el=>obs.observe(el));
+
+/* TIMELINE ITEMS — отдельный observer с меньшим порогом */
+const tlObs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');tlObs.unobserve(e.target);}});},{threshold:.08,rootMargin:'0px 0px -20px 0px'});
+document.querySelectorAll('.tl-item').forEach(el=>tlObs.observe(el));
 
 /* COUNTER */
 function animCount(el){const target=+el.dataset.count,suffix=el.dataset.suffix||'',dur=2200,start=performance.now();(function step(now){const p=Math.min((now-start)/dur,1),ease=1-Math.pow(1-p,4),val=Math.round(ease*target);el.textContent=(target>=10000?val.toLocaleString('ru'):val)+suffix;if(p<1)requestAnimationFrame(step);})(start);}
 const cobs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){animCount(e.target);cobs.unobserve(e.target);}});},{threshold:.5});
 document.querySelectorAll('.stat-number[data-count]').forEach(el=>cobs.observe(el));
 
-/* NAV SHRINK */
-window.addEventListener('scroll',()=>{document.querySelector('nav').style.padding=scrollY>60?'11px 60px':'20px 60px';});
+/* NAV SHRINK + HERO PARALLAX */
+const heroInner=document.querySelector('.hero-inner');
+const fireBg=document.querySelector('.fire-base');
+window.addEventListener('scroll',()=>{
+  const s=scrollY;
+  document.querySelector('nav').style.padding=s>60?'11px 60px':'20px 60px';
+  // параллакс hero
+  if(heroInner) heroInner.style.transform=`translateY(${s*.22}px)`;
+  if(fireBg) fireBg.style.transform=`translateX(-50%) scale(${1+s*.0003}) translateY(${s*.1}px)`;
+},{passive:true});
 </script>
 </body>
 </html>

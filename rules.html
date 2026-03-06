@@ -48,10 +48,24 @@
     .nav-links a:hover::after{width:100%;}
     .nav-links a.active-page{color:var(--flame-gold);}
     .nav-links a.active-page::after{width:100%;}
-    /* canvas never intercepts pointer events */
     canvas{pointer-events:none!important;}
     .nav-right{font-size:.7rem;letter-spacing:.12em;color:var(--smoke);font-style:italic;}
     .nav-right b{color:var(--soft-amber);font-style:normal;}
+    /* BURGER */
+    .burger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:6px;z-index:600;}
+    .burger span{display:block;width:24px;height:1.5px;background:var(--flame-gold);transition:transform .35s,opacity .25s,width .3s;transform-origin:center;}
+    .burger.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg);}
+    .burger.open span:nth-child(2){opacity:0;width:0;}
+    .burger.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg);}
+    #mob-nav{position:fixed;top:0;left:0;right:0;bottom:0;z-index:490;background:rgba(8,4,2,.97);backdrop-filter:blur(20px);display:flex;flex-direction:column;align-items:center;justify-content:center;transform:translateY(-110%);transition:transform .5s cubic-bezier(.4,0,.2,1);pointer-events:none;}
+    #mob-nav.open{transform:none;pointer-events:all;}
+    .mob-list{list-style:none;display:flex;flex-direction:column;align-items:center;gap:0;width:100%;}
+    .mob-list li{width:100%;border-bottom:1px solid rgba(245,166,35,.07);text-align:center;}
+    .mob-list li:first-child{border-top:1px solid rgba(245,166,35,.07);}
+    .mob-list a{display:block;padding:22px 28px;font-family:'Cinzel',serif;font-size:1.1rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--cream-dim);text-decoration:none;transition:color .3s,background .3s,padding-left .3s;}
+    .mob-list a:hover{color:var(--flame-gold);background:rgba(245,166,35,.05);padding-left:36px;}
+    .mob-by{font-family:'Philosopher',serif;font-style:italic;font-size:.95rem;color:var(--smoke);margin-top:36px;}
+    .mob-by b{font-family:'Cinzel',serif;font-style:normal;font-size:.7rem;letter-spacing:.1em;color:var(--soft-amber);}
 
     /* ── PAGE HERO ── */
     .page-hero{position:relative;height:60vh;min-height:420px;display:flex;align-items:center;justify-content:center;overflow:hidden;z-index:2;padding-top:80px;isolation:isolate;}
@@ -158,6 +172,7 @@
 
     @media(max-width:960px){
       nav{padding:14px 24px;}.nav-links{display:none;}
+      .burger{display:flex;}
       .rules-layout{grid-template-columns:1fr;padding:40px 24px 80px;}
       .sidebar{position:static;border-right:none;border-bottom:1px solid rgba(245,166,35,.1);padding:0 0 30px;margin-bottom:40px;}
       .rules-content{padding-left:0;}
@@ -177,12 +192,28 @@
 <nav>
   <a href="index.html" class="nav-logo"><div class="nav-dot"></div>Дом Очага</a>
   <ul class="nav-links">
-    <li><a href="index.html">Главная</a></li>
-    <li><a href="#join">Вступление</a></li>
-    <li><a href="#general">Правила</a></li>
+    <li><a href="roles.html">Роли</a></li>
+    <li><a href="games.html">Игры</a></li>
+    <li><a href="tiktok.html">Тик Ток</a></li>
+    <li><a href="birthdays.html">Дни рождения</a></li>
+    <li><a href="rules.html" class="active-page">Правила</a></li>
   </ul>
+  <button class="burger" id="burger" aria-label="Меню">
+    <span></span><span></span><span></span>
+  </button>
   <div class="nav-right">by <b>dernocist</b> & <b>doctocist</b></div>
 </nav>
+
+<div id="mob-nav">
+  <ul class="mob-list">
+    <li><a href="roles.html" class="mob-link">Роли</a></li>
+    <li><a href="games.html" class="mob-link">Игры</a></li>
+    <li><a href="tiktok.html" class="mob-link">Тик Ток</a></li>
+    <li><a href="birthdays.html" class="mob-link">Дни рождения</a></li>
+    <li><a href="rules.html" class="mob-link">Правила</a></li>
+  </ul>
+  <div class="mob-by">by <b>dernocist & doctocist</b></div>
+</div>
 
 <!-- PAGE HERO -->
 <section class="page-hero">
@@ -250,7 +281,7 @@
           <div class="step-num">1</div>
           <div class="step-content">
             <div class="step-title">Выбор роли и обращение к Ответственному</div>
-            <div class="step-text">После прочтения правил Вы выбираете роль из списка, после чего пишете администратору, ответственному за набор (далее — <strong>Ответственный</strong>), в личные сообщения.</div>
+            <div class="step-text">После прочтения правил Вы выбираете роль из списка, после чего пишете администратору, ответственному за набор (далее — <strong>Ответственный</strong>), в личные сообщения.<br><br>Заявки во флуд принимает <a href="https://t.me/Astarot_flood" target="_blank"><strong>@Astarot_flood</strong></a> — отвечает с <em>11:00 до 21:00 по МСК</em>.</div>
           </div>
         </div>
         <div class="step-item">
@@ -494,6 +525,11 @@
 </footer>
 
 <script>
+/* ── BURGER ── */
+const burger=document.getElementById('burger'),mobNav=document.getElementById('mob-nav');
+burger.addEventListener('click',()=>{burger.classList.toggle('open');mobNav.classList.toggle('open');document.body.style.overflow=mobNav.classList.contains('open')?'hidden':'';});
+document.querySelectorAll('.mob-link').forEach(l=>l.addEventListener('click',()=>{burger.classList.remove('open');mobNav.classList.remove('open');document.body.style.overflow='';}));
+
 /* ── CURSOR ── */
 const cur=document.getElementById('cursor'),ring=document.getElementById('cursor-ring');
 let mx=0,my=0,rx=0,ry=0;
