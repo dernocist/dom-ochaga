@@ -372,7 +372,11 @@
     .d1{transition-delay:.1s;}.d2{transition-delay:.2s;}.d3{transition-delay:.3s;}
 
     @media(max-width:900px){
-      nav{padding:0 24px;height:60px;}
+      /* Убираем кастомный курсор на тач-устройствах */
+      body{cursor:auto;}
+      #cursor,#cursor-ring{display:none!important;}
+
+      nav{padding:0 20px;height:60px;}
       .nav-links{display:none;}
       .nav-right{display:none;}
       .nav-logo-ornament{display:none;}
@@ -605,15 +609,21 @@
 </footer>
 
 <script>
-/* CURSOR */
+/* CURSOR — только на десктопе */
 const cur=document.getElementById('cursor'),ring=document.getElementById('cursor-ring');
-let mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
-(function aR(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(aR);})();
-document.querySelectorAll('a,button,.stat-card,.gallery-item,.tl-item,.auth-tag').forEach(el=>{
-  el.addEventListener('mouseenter',()=>{cur.style.transform='translate(-50%,-50%) scale(2)';ring.style.width='54px';ring.style.height='54px';ring.style.opacity='1';});
-  el.addEventListener('mouseleave',()=>{cur.style.transform='translate(-50%,-50%) scale(1)';ring.style.width='34px';ring.style.height='34px';ring.style.opacity='.7';});
-});
+if(window.matchMedia('(pointer:fine)').matches){
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
+  (function aR(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(aR);})();
+  document.querySelectorAll('a,button,.stat-card,.gallery-item,.tl-item,.auth-tag').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{cur.style.transform='translate(-50%,-50%) scale(2)';ring.style.width='54px';ring.style.height='54px';ring.style.opacity='1';});
+    el.addEventListener('mouseleave',()=>{cur.style.transform='translate(-50%,-50%) scale(1)';ring.style.width='34px';ring.style.height='34px';ring.style.opacity='.7';});
+  });
+}else{
+  // Тач-устройство — скрываем кастомный курсор
+  cur.style.display='none';ring.style.display='none';
+  document.body.style.cursor='auto';
+}
 
 /* BURGER */
 const burger=document.getElementById('burger'),mobNav=document.getElementById('mob-nav');
